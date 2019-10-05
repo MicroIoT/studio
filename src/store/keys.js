@@ -1,0 +1,7 @@
+export const ALARMS_STATE = 'alarms-state'
+export const ALARM_DETAILS_STATE = 'alarm-details-state'
+export const LOGIN_STATE = 'login-state'
+export const USER_STATE = 'user-state'
+export const SERVER_STATE = 'server-state'
+export const DOMAIN_STATE = 'domain-state'
+export const TOKEN_STATE = 'token-state'
