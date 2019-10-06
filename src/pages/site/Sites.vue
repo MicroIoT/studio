@@ -1,9 +1,14 @@
 <template>
-  <q-page class="flex justify-center q-ma-md">
-  <!-- if you want automatic padding use "layout-padding" class -->
+  <q-page class="flex justify-center q-ma-md ">
     <q-pull-to-refresh @refresh="refresh">
       <div style="width: 600px">
-        <q-breadcrumbs class="q-ma-md">
+        <q-toolbar class="text-primary q-my-lg">
+          <q-btn flat round dense icon="view_day" />
+          <q-toolbar-title>
+            设备
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-breadcrumbs separator="|" class="q-ma-md">
           <q-breadcrumbs-el :label="this.$store.getters.getDomain.name" icon="home" @click="goto('root')">
           </q-breadcrumbs-el>
           <q-breadcrumbs-el
@@ -18,7 +23,7 @@
         <q-infinite-scroll @load="loadMore" ref="scroll" >
           <q-list highlight separator>
             <q-item v-for="site in sites" :key="site.id">
-              <q-item-section avatar v-if="$q.screen.gt.sm">
+              <q-item-section avatar v-if="$q.screen.gt.xs">
                 <q-icon color="primary" name="location_city" />
               </q-item-section>
               <q-item-section @click="goto(site.id)">
@@ -26,16 +31,23 @@
                 <q-item-label caption >{{site.siteType.name}}</q-item-label>
               </q-item-section>
               <q-item-section side @click="gotoSite(site.id)">
-                <q-icon name="play_arrow" />
+                <q-btn color="secondary" size="12px" flat dense round icon="info" >
+                  <q-tooltip>详情</q-tooltip>
+                </q-btn>
               </q-item-section>
             </q-item>
             <q-item v-for="device in devices" :key="device.id">
-              <q-item-section avatar v-if="$q.screen.gt.sm">
+              <q-item-section avatar v-if="$q.screen.gt.xs">
                 <q-icon color="primary" :name="device.connected?'devices':'phonelink_off'" />
               </q-item-section>
               <q-item-section @click="gotoDevice(device.id)">
                 <q-item-label>{{device.name}}</q-item-label>
                 <q-item-label caption>{{device.deviceType.name}}</q-item-label>
+              </q-item-section>
+              <q-item-section side @click="gotoDevice(device.id)">
+                <q-btn color="secondary" size="12px" flat dense round icon="info" >
+                  <q-tooltip>详情</q-tooltip>
+                </q-btn>
               </q-item-section>
             </q-item>
           </q-list>
@@ -50,7 +62,7 @@
 import { http } from '../../components/http'
 
 export default {
-  name: 'site',
+  name: 'sites',
   data () {
     return {
       sites: [],
@@ -65,7 +77,6 @@ export default {
   },
   created: function () {
     this.parentId = this.$route.params.parentId
-    console.log('sites created: ' + this.parentId)
     if (this.parentId === 'root') {
       this.parentId = ''
     }
@@ -120,7 +131,6 @@ export default {
       }
     },
     goto (pId) {
-      console.log('go to: ' + pId)
       if (pId === 'root') {
         pId = ''
       }
@@ -146,11 +156,9 @@ export default {
       this.$refs.scroll.reset()
       this.$refs.scroll.resume()
       this.$refs.scroll.trigger()
-      console.log('refresh list')
     },
     loadMore (pageNo, done) {
       pageNo--
-      console.log('page: ' + pageNo)
       if (!this.siteFinished) {
         let pid
         if (this.parentId === '') {

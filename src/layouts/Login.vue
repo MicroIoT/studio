@@ -3,7 +3,7 @@
 
     <q-page-container>
       <q-page padding class="column justify-center items-center" >
-        <q-card inline style="width: 400px; max-width: 90vw; height: 700px">
+        <q-card inline style="width: 400px; height: 700px">
           <div class="row justify-center q-mt-md">
             <img alt="Quasar logo" src="statics/icons/favicon-96x96.png" width="72">
           </div>

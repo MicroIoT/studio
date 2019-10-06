@@ -7,6 +7,6 @@
 
 <script>
 export default {
-  name: 'PageIndex'
+  name: 'home'
 }
 </script>

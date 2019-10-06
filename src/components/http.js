@@ -53,9 +53,9 @@ export function http (type, url, params, callback, refresh) {
           errorMsg = error.message
           console.log(error)
         }
-        if (error.response && error.response.status === 401) {
+        if (error.response && error.response.status === 401 && url !== '/login') {
           http('get', '/token', null, (response) => {
-            store.commit('login/token', response.data)
+            store.commit('token', response.data)
             http(type, url, params, callback)
           }, true)
         } else {

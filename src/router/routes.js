@@ -2,6 +2,7 @@
 const routes = [
   {
     path: '/',
+    name: 'login',
     component: () => import('layouts/Login.vue')
   },
   {
@@ -9,13 +10,32 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '',
+        name: 'home',
         component: () => import('pages/Index.vue')
       },
       { path: 'site/:parentId',
-        component: () => import('pages/site/Sites.vue'),
-        meta: {
-          keepAlive: true
-        }
+        name: 'sites',
+        component: () => import('pages/site/Sites.vue')
+      },
+      { path: 'devicegroups',
+        name: 'devicegroups',
+        component: () => import('pages/configuration/DeviceGroups.vue')
+      },
+      { path: 'devicetypes',
+        name: 'devicetypes',
+        component: () => import('pages/configuration/DeviceTypes.vue')
+      },
+      { path: 'sitetypes',
+        name: 'sitetypes',
+        component: () => import('pages/configuration/SiteTypes.vue')
+      },
+      { path: 'users',
+        name: 'users',
+        component: () => import('pages/user/Users.vue')
+      },
+      { path: 'favorites',
+        name: 'favorites',
+        component: () => import('pages/favorite/Favorites.vue')
       }
     ]
   }

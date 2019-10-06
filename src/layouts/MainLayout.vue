@@ -25,10 +25,7 @@
             </q-badge>
             <q-tooltip>Notifications</q-tooltip>
           </q-btn>
-          <q-btn round flat>
-            <q-avatar size="26px">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-            </q-avatar>
+          <q-btn round flat icon="account_box">
             <q-tooltip>Account</q-tooltip>
           </q-btn>
         </div>
@@ -40,7 +37,7 @@
       show-if-above
       bordered
       content-class="bg-grey-2"
-      :width="150"
+      :width="180"
     >
       <q-scroll-area class="fit">
         <q-list padding >
@@ -52,7 +49,8 @@
               <q-item-label>首页</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple :to="getTo" exact>
+          <q-separator spaced inset/>
+          <q-item clickable v-ripple :to="getTo">
             <q-item-section avatar>
               <q-icon name="view_day"/>
             </q-item-section>
@@ -68,8 +66,36 @@
               <q-item-label>告警</q-item-label>
             </q-item-section>
           </q-item>
-          <q-separator spaced />
-          <q-item clickable v-ripple >
+          <q-separator spaced inset/>
+          <q-item-label header class="text-weight-bold">
+            系统配置
+          </q-item-label>
+          <q-item clickable v-ripple to="/home/sitetypes">
+            <q-item-section avatar>
+              <q-icon name="location_city"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>场地类型</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple to="/home/devicetypes">
+            <q-item-section avatar>
+              <q-icon name="devices"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>设备类型</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple v-if="$store.getters.getCurrentUser.isSystem" to="/home/devicegroups">
+            <q-item-section avatar>
+              <q-icon name="group_work"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>设备组</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-separator spaced inset/>
+          <q-item clickable v-ripple v-if="$store.getters.getCurrentUser.isSystem" to="/home/users">
             <q-item-section avatar>
               <q-icon name="people"/>
             </q-item-section>
@@ -77,7 +103,7 @@
               <q-item-label>用户</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple >
+          <q-item clickable v-ripple to="/home/favorites" replace>
             <q-item-section avatar>
               <q-icon name="favorite"/>
             </q-item-section>
@@ -85,23 +111,14 @@
               <q-item-label>收藏</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple >
-            <q-item-section avatar>
-              <q-icon name="settings"/>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>配置</q-item-label>
-            </q-item-section>
-          </q-item>
         </q-list>
       </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
-      <keep-alive>
-        <router-view v-if="$route.meta.keepAlive" v-on:change="change"/>
+      <keep-alive include="sites">
+        <router-view v-on:change="change"/>
       </keep-alive>
-      <router-view v-if="!$route.meta.keepAlive"/>
     </q-page-container>
   </q-layout>
 </template>
