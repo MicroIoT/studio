@@ -8,24 +8,28 @@
             设备组
           </q-toolbar-title>
         </q-toolbar>
-        <q-infinite-scroll @load="loadMore" ref="scroll" >
-          <q-list highlight separator>
-            <q-item v-for="deviceGroup in deviceGroups" :key="deviceGroup.id">
-              <q-item-section avatar v-if="$q.screen.gt.xs">
-                <q-icon color="primary" name="group_work" />
-              </q-item-section>
-              <q-item-section @click="goto(site.id)">
-                <q-item-label >{{deviceGroup.name}}</q-item-label>
-              </q-item-section>
-              <q-item-section side @click="gotoSite(site.id)">
-                <q-btn color="secondary" size="12px" flat dense round icon="info" >
-                  <q-tooltip>详情</q-tooltip>
-                </q-btn>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-infinite-scroll>
-        <q-separator />
+        <q-card class="q-ma-md">
+          <q-card-section>
+            <q-infinite-scroll @load="loadMore" ref="scroll" >
+              <q-list highlight separator>
+                <q-item v-for="deviceGroup in deviceGroups" :key="deviceGroup.id">
+                  <q-item-section avatar v-if="$q.screen.gt.xs">
+                    <q-icon color="primary" name="group_work" />
+                  </q-item-section>
+                  <q-item-section @click="goto(site.id)">
+                    <q-item-label >{{deviceGroup.name}}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side @click="gotoSite(site.id)">
+                    <q-btn color="secondary" size="12px" flat dense round icon="info" >
+                      <q-tooltip>详情</q-tooltip>
+                    </q-btn>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-infinite-scroll>
+            <q-separator />
+          </q-card-section>
+        </q-card>
       </div>
     </q-pull-to-refresh>
   </q-page>

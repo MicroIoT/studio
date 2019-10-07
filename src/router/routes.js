@@ -29,6 +29,11 @@ const routes = [
         name: 'sitetypes',
         component: () => import('pages/configuration/SiteTypes.vue')
       },
+      {
+        path: 'sitetypes/sitetype/:id',
+        name: 'sitetype',
+        component: () => import('pages/configuration/SiteType')
+      },
       { path: 'users',
         name: 'users',
         component: () => import('pages/user/Users.vue')

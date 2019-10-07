@@ -8,29 +8,33 @@
             收藏
           </q-toolbar-title>
         </q-toolbar>
-          <q-infinite-scroll @load="loadMore" ref="scroll" >
-            <q-list highlight separator>
-              <q-item v-for="favorite in favorites" :key="favorite.id">
-                <q-item-section avatar v-if="$q.screen.gt.xs">
-                  <q-icon color="primary" :name="favorite.mo.type === 'site'? 'location_city':'devices'" />
-                </q-item-section>
-                <q-item-section @click="goto(site.id)">
-                  <q-item-label >{{favorite.name}}</q-item-label>
-                </q-item-section>
-                <q-item-section side @click="gotoSite(site.id)">
-                  <div class="text-grey-8 q-gutter-xs">
-                    <q-btn class="gt-xs" size="12px" flat dense round icon="edit" color="secondary" @click="rename(favorite)">
-                      <q-tooltip>重命名</q-tooltip>
-                    </q-btn>
-                    <q-btn size="12px" flat dense round icon="delete" color="red" @click="del(favorite.id)">
-                      <q-tooltip>删除</q-tooltip>
-                    </q-btn>
-                  </div>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-infinite-scroll>
-        <q-separator />
+        <q-card class="q-ma-md">
+          <q-card-section>
+            <q-infinite-scroll @load="loadMore" ref="scroll" >
+              <q-list highlight separator>
+                <q-item v-for="favorite in favorites" :key="favorite.id">
+                  <q-item-section avatar v-if="$q.screen.gt.xs">
+                    <q-icon color="primary" :name="favorite.mo.type === 'site'? 'location_city':'devices'" />
+                  </q-item-section>
+                  <q-item-section @click="goto(site.id)">
+                    <q-item-label >{{favorite.name}}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side @click="gotoSite(site.id)">
+                    <div class="text-grey-8 q-gutter-xs">
+                      <q-btn class="gt-xs" size="12px" flat dense round icon="edit" color="secondary" @click="rename(favorite)">
+                        <q-tooltip>重命名</q-tooltip>
+                      </q-btn>
+                      <q-btn size="12px" flat dense round icon="delete" color="red" @click="del(favorite.id)">
+                        <q-tooltip>删除</q-tooltip>
+                      </q-btn>
+                    </div>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-infinite-scroll>
+            <q-separator />
+          </q-card-section>
+        </q-card>
       </div>
     </q-pull-to-refresh>
   </q-page>

@@ -8,51 +8,55 @@
             设备
           </q-toolbar-title>
         </q-toolbar>
-        <q-breadcrumbs separator="|" class="q-ma-md">
-          <q-breadcrumbs-el :label="this.$store.getters.getDomain.name" icon="home" @click="goto('root')">
-          </q-breadcrumbs-el>
-          <q-breadcrumbs-el
-            v-for="(parent, index) in parents"
-            :key="index"
-            :label="parent.name + parent.siteType.name"
-            icon="location_city"
-            @click="goto(parent.id)">
-          </q-breadcrumbs-el>
-        </q-breadcrumbs>
-        <q-separator />
-        <q-infinite-scroll @load="loadMore" ref="scroll" >
-          <q-list highlight separator>
-            <q-item v-for="site in sites" :key="site.id">
-              <q-item-section avatar v-if="$q.screen.gt.xs">
-                <q-icon color="primary" name="location_city" />
-              </q-item-section>
-              <q-item-section @click="goto(site.id)">
-                <q-item-label >{{site.name}}</q-item-label>
-                <q-item-label caption >{{site.siteType.name}}</q-item-label>
-              </q-item-section>
-              <q-item-section side @click="gotoSite(site.id)">
-                <q-btn color="secondary" size="12px" flat dense round icon="info" >
-                  <q-tooltip>详情</q-tooltip>
-                </q-btn>
-              </q-item-section>
-            </q-item>
-            <q-item v-for="device in devices" :key="device.id">
-              <q-item-section avatar v-if="$q.screen.gt.xs">
-                <q-icon color="primary" :name="device.connected?'devices':'phonelink_off'" />
-              </q-item-section>
-              <q-item-section @click="gotoDevice(device.id)">
-                <q-item-label>{{device.name}}</q-item-label>
-                <q-item-label caption>{{device.deviceType.name}}</q-item-label>
-              </q-item-section>
-              <q-item-section side @click="gotoDevice(device.id)">
-                <q-btn color="secondary" size="12px" flat dense round icon="info" >
-                  <q-tooltip>详情</q-tooltip>
-                </q-btn>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-infinite-scroll>
-        <q-separator />
+        <q-card class="q-ma-md">
+          <q-card-section>
+            <q-breadcrumbs separator="|" class="q-ma-md">
+              <q-breadcrumbs-el :label="this.$store.getters.getDomain.name" icon="home" @click="goto('root')">
+              </q-breadcrumbs-el>
+              <q-breadcrumbs-el
+                v-for="(parent, index) in parents"
+                :key="index"
+                :label="parent.name + parent.siteType.name"
+                icon="location_city"
+                @click="goto(parent.id)">
+              </q-breadcrumbs-el>
+            </q-breadcrumbs>
+            <q-separator />
+            <q-infinite-scroll @load="loadMore" ref="scroll" >
+              <q-list highlight separator>
+                <q-item v-for="site in sites" :key="site.id">
+                  <q-item-section avatar v-if="$q.screen.gt.xs">
+                    <q-icon color="primary" name="location_city" />
+                  </q-item-section>
+                  <q-item-section @click="goto(site.id)">
+                    <q-item-label >{{site.name}}</q-item-label>
+                    <q-item-label caption >{{site.siteType.name}}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side @click="gotoSite(site.id)">
+                    <q-btn color="secondary" size="12px" flat dense round icon="info" >
+                      <q-tooltip>详情</q-tooltip>
+                    </q-btn>
+                  </q-item-section>
+                </q-item>
+                <q-item v-for="device in devices" :key="device.id">
+                  <q-item-section avatar v-if="$q.screen.gt.xs">
+                    <q-icon color="primary" :name="device.connected?'devices':'phonelink_off'" />
+                  </q-item-section>
+                  <q-item-section @click="gotoDevice(device.id)">
+                    <q-item-label>{{device.name}}</q-item-label>
+                    <q-item-label caption>{{device.deviceType.name}}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side @click="gotoDevice(device.id)">
+                    <q-btn color="secondary" size="12px" flat dense round icon="info" >
+                      <q-tooltip>详情</q-tooltip>
+                    </q-btn>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-infinite-scroll>
+            <q-separator />
+          </q-card-section>
+        </q-card>
       </div>
     </q-pull-to-refresh>
   </q-page>
