@@ -125,7 +125,7 @@
 
 <script>
 export default {
-  name: 'MyLayout',
+  name: 'main-layout',
 
   data () {
     return {

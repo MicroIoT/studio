@@ -16,7 +16,7 @@
                   <q-item-section avatar v-if="$q.screen.gt.xs">
                     <q-icon color="primary" :name="favorite.mo.type === 'site'? 'location_city':'devices'" />
                   </q-item-section>
-                  <q-item-section @click="goto(site.id)">
+                  <q-item-section @click="goto(site.id)" class="cursor-pointer">
                     <q-item-label >{{favorite.name}}</q-item-label>
                   </q-item-section>
                   <q-item-section side @click="gotoSite(site.id)">
@@ -76,10 +76,6 @@ export default {
         },
         ok: {
           label: '确定'
-        },
-        cancel: {
-          color: 'light-blue-3',
-          label: '取消'
         }
       }).onOk((data) => {
         let editUrl = '/favorites'

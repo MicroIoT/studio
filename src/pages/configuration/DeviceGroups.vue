@@ -16,7 +16,7 @@
                   <q-item-section avatar v-if="$q.screen.gt.xs">
                     <q-icon color="primary" name="group_work" />
                   </q-item-section>
-                  <q-item-section @click="goto(site.id)">
+                  <q-item-section @click="goto(site.id)" class="cursor-pointer">
                     <q-item-label >{{deviceGroup.name}}</q-item-label>
                   </q-item-section>
                   <q-item-section side @click="gotoSite(site.id)">
@@ -39,7 +39,7 @@
 import { http } from '../../components/http'
 
 export default {
-  name: 'devicegroups',
+  name: 'device-groups',
   data () {
     return {
       deviceGroups: []

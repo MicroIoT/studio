@@ -14,6 +14,8 @@
           <div class="q-ma-md">
             <q-field
               label="用户"
+              hint=""
+              stack-label
               :error="$v.form.username.$error"
               error-message="用户名称不能为空"
             >
@@ -21,6 +23,8 @@
             </q-field>
             <q-field
               label="密码"
+              hint=""
+              stack-label
               :error="$v.form.password.$error"
               error-message="密码不能为空"
             >
@@ -28,6 +32,8 @@
             </q-field>
             <q-field
               label="服务器地址"
+              hint=""
+              stack-label
               :error="$v.form.server.$error"
               error-message="服务器地址不能为空"
             >
@@ -38,6 +44,8 @@
             </q-field>
             <q-field
               label="领域"
+              hint=""
+              stack-label
               :error="$v.form.domain.$error"
               error-message="领域名称不能为空"
             >
@@ -59,6 +67,7 @@ import { required } from 'vuelidate/lib/validators'
 import { http } from '../components/http'
 import { stomp } from '../components/stomp'
 export default {
+  name: 'login',
   data () {
     return {
       leftDrawer: true,
@@ -97,7 +106,7 @@ export default {
       }
       let server = {
         host: this.form.server,
-        protocol: this.form.protocol
+        protocol: this.form.protocol.value
       }
       this.$store.commit('server', server)
 

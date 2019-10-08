@@ -25,6 +25,11 @@ const routes = [
         name: 'devicetypes',
         component: () => import('pages/configuration/DeviceTypes.vue')
       },
+      {
+        path: 'devicetypes/devicetype/:id',
+        name: 'devicetype',
+        component: () => import('pages/configuration/DeviceType')
+      },
       { path: 'sitetypes',
         name: 'sitetypes',
         component: () => import('pages/configuration/SiteTypes.vue')

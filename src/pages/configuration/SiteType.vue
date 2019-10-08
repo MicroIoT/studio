@@ -21,10 +21,10 @@
                 </q-item-section>
               </q-item>
             </q-list>
+            <q-card>
+              <AttributeDefinition title="场地属性" :attributeDefinition="sitetype.attDefinition"/>
+            </q-card>
           </q-card-section>
-        </q-card>
-        <q-card class="q-ma-md">
-          <AttributeDefinition title="场地属性" :attributeDefinition="sitetype.attDefinition"/>
         </q-card>
       </div>
     </q-pull-to-refresh>
@@ -39,7 +39,7 @@ export default {
   components: {
     AttributeDefinition
   },
-  name: 'sitetype',
+  name: 'site-type',
   data () {
     return {
       sitetypeId: '',

@@ -12,11 +12,11 @@
           <q-card-section>
             <q-infinite-scroll @load="loadMore" ref="scroll" >
               <q-list highlight separator>
-                <q-item v-for="siteType in siteTypes" :key="siteType.id">
+                <q-item v-for="siteType in siteTypes" :key="siteType.id" >
                   <q-item-section avatar v-if="$q.screen.gt.xs">
                     <q-icon color="primary" name="location_city" />
                   </q-item-section>
-                  <q-item-section @click="goto(siteType.id)">
+                  <q-item-section @click="goto(siteType.id)" class="cursor-pointer">
                     <q-item-label >{{siteType.name}}</q-item-label>
                   </q-item-section>
                   <q-item-section side @click="goto(siteType.id)">
@@ -39,7 +39,7 @@
 import { http } from '../../components/http'
 
 export default {
-  name: 'sitetypes',
+  name: 'site-types',
   data () {
     return {
       siteTypes: []

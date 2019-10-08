@@ -16,10 +16,10 @@
                   <q-item-section avatar v-if="$q.screen.gt.xs">
                     <q-icon color="primary" name="devices" />
                   </q-item-section>
-                  <q-item-section @click="goto(site.id)">
+                  <q-item-section @click="goto(deviceType.id)" class="cursor-pointer">
                     <q-item-label >{{deviceType.name}}</q-item-label>
                   </q-item-section>
-                  <q-item-section side @click="gotoSite(site.id)">
+                  <q-item-section side @click="goto(deviceType.id)">
                     <q-btn color="secondary" size="12px" flat dense round icon="info" >
                       <q-tooltip>详情</q-tooltip>
                     </q-btn>
@@ -39,7 +39,7 @@
 import { http } from '../../components/http'
 
 export default {
-  name: 'devicetypes',
+  name: 'device-types',
   data () {
     return {
       deviceTypes: []
@@ -48,9 +48,9 @@ export default {
   computed: {
   },
   methods: {
-    gotoSite (id) {
+    goto (id) {
       var page = {
-        name: 'site',
+        name: 'devicetype',
         params: { id: id }
       }
       this.$router.push(page)

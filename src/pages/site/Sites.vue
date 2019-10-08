@@ -28,7 +28,7 @@
                   <q-item-section avatar v-if="$q.screen.gt.xs">
                     <q-icon color="primary" name="location_city" />
                   </q-item-section>
-                  <q-item-section @click="goto(site.id)">
+                  <q-item-section @click="goto(site.id)" class="cursor-pointer">
                     <q-item-label >{{site.name}}</q-item-label>
                     <q-item-label caption >{{site.siteType.name}}</q-item-label>
                   </q-item-section>
@@ -42,7 +42,7 @@
                   <q-item-section avatar v-if="$q.screen.gt.xs">
                     <q-icon color="primary" :name="device.connected?'devices':'phonelink_off'" />
                   </q-item-section>
-                  <q-item-section @click="gotoDevice(device.id)">
+                  <q-item-section @click="gotoDevice(device.id)" class="cursor-pointer">
                     <q-item-label>{{device.name}}</q-item-label>
                     <q-item-label caption>{{device.deviceType.name}}</q-item-label>
                   </q-item-section>
