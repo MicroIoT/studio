@@ -21,6 +21,11 @@ const routes = [
         name: 'devicegroups',
         component: () => import('pages/configuration/DeviceGroups.vue')
       },
+      {
+        path: 'devicegroups/devicegroup/:id',
+        name: 'devicegroup',
+        component: () => import('pages/configuration/DeviceGroup')
+      },
       { path: 'devicetypes',
         name: 'devicetypes',
         component: () => import('pages/configuration/DeviceTypes.vue')

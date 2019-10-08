@@ -16,10 +16,10 @@
                   <q-item-section avatar v-if="$q.screen.gt.xs">
                     <q-icon color="primary" name="group_work" />
                   </q-item-section>
-                  <q-item-section @click="goto(site.id)" class="cursor-pointer">
+                  <q-item-section @click="goto(deviceGroup.id)" class="cursor-pointer">
                     <q-item-label >{{deviceGroup.name}}</q-item-label>
                   </q-item-section>
-                  <q-item-section side @click="gotoSite(site.id)">
+                  <q-item-section side @click="goto(deviceGroup.id)">
                     <q-btn color="secondary" size="12px" flat dense round icon="info" >
                       <q-tooltip>详情</q-tooltip>
                     </q-btn>
@@ -48,9 +48,9 @@ export default {
   computed: {
   },
   methods: {
-    gotoSite (id) {
+    goto (id) {
       var page = {
-        name: 'site',
+        name: 'devicegroup',
         params: { id: id }
       }
       this.$router.push(page)
