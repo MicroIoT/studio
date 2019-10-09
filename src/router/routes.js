@@ -18,9 +18,14 @@ const routes = [
         component: () => import('pages/site/Sites.vue')
       },
       {
-        path: 'sites/:parentId/:id',
+        path: 'sites/:parentId/site/:id',
         name: 'site',
         component: () => import('pages/site/Site.vue')
+      },
+      {
+        path: 'sites/:parentId/device/:id',
+        name: 'device',
+        component: () => import('pages/site/Device.vue')
       },
       { path: 'devicegroups',
         name: 'devicegroups',

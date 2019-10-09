@@ -12,15 +12,15 @@
     <q-separator />
     <q-tab-panels v-model="tab">
       <q-tab-panel :name="key"  v-for="(value, key) in attributeDefinition" :key="key" >
-        <div class="q-gutter-md q-my-md">
-          <q-btn color="primary" size="12px" flat dense icon="cloud_upload" v-if="value.get" @click="$emit('get', key)">
-            读取
+        <div class="q-gutter-md q-mb-md">
+          <q-btn color="primary" v-if="value.get" @click="$emit('get', key)">
+            {{instance? '读取':'可读取'}}
           </q-btn>
-          <q-btn color="primary" size="12px" flat dense icon="cloud_download" v-if="value.set" @click="$emit('set', key)">
-            设置
+          <q-btn color="primary" v-if="value.set" @click="$emit('set', key)">
+            {{instance? '设置':'可设置'}}
           </q-btn>
-          <q-btn color="primary" size="12px" flat dense icon="arrow_upward" v-if="value.report" @click="report(key)">
-            上报
+          <q-btn color="primary" v-if="value.report" @click="report(key)">
+            {{instance? '查询':'可上报'}}
           </q-btn>
         </div>
         <q-field stack-label  label="数据类型">
@@ -68,7 +68,7 @@ import { getTypeInfo } from './util'
 
 export default {
   name: 'AttributeDefinition',
-  props: ['attributeDefinition', 'title', 'icon'],
+  props: ['attributeDefinition', 'title', 'icon', 'instance'],
   data () {
     return {
       tab: ''

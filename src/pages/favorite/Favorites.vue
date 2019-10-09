@@ -16,10 +16,10 @@
                   <q-item-section avatar v-if="$q.screen.gt.xs">
                     <q-icon color="primary" :name="favorite.mo.type === 'site'? 'location_city':'devices'" />
                   </q-item-section>
-                  <q-item-section @click="goto(site.id)" class="cursor-pointer">
+                  <q-item-section @click="goto(favorite.mo.type, favorite.mo.id)" class="cursor-pointer">
                     <q-item-label >{{favorite.name}}</q-item-label>
                   </q-item-section>
-                  <q-item-section side @click="gotoSite(site.id)">
+                  <q-item-section side >
                     <div class="text-grey-8 q-gutter-xs">
                       <q-btn class="gt-xs" size="12px" flat dense round icon="edit" color="secondary" @click="rename(favorite)">
                         <q-tooltip>重命名</q-tooltip>
@@ -53,12 +53,9 @@ export default {
   computed: {
   },
   methods: {
-    gotoSite (id) {
-      var page = {
-        name: 'site',
-        params: { id: id }
-      }
-      this.$router.push(page)
+    goto (type, id) {
+      let url = '/home/sites/root/' + type + '/' + id
+      this.$router.push({ path: url })
     },
     del (id) {
       let delUrl = '/favorites/' + id

@@ -63,6 +63,9 @@ export default {
     this.getDevicegroup()
   },
   methods: {
+    gotoDevice (id) {
+      this.$router.push({ path: '/home/sites/root/device/' + id })
+    },
     getDevicegroup () {
       let devicegroupUrl = '/devicegroups/' + this.devicegroupId
       http('get', devicegroupUrl, '', (response) => {
