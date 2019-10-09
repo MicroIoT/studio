@@ -3,7 +3,7 @@
     <q-pull-to-refresh @refresh="refresh">
       <div style="width: 600px">
         <q-toolbar class="text-primary q-my-lg">
-          <q-btn flat round dense icon="group_work" />
+          <q-btn flat round dense icon="arrow_back" @click="$router.back()"/>
           <q-toolbar-title>
             设备组详细信息
           </q-toolbar-title>

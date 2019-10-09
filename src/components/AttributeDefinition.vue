@@ -5,7 +5,7 @@
     expand-separator
     header-class="text-primary"
     :label="title"
-    v-if="attributeDefinition !== null && Object.keys(attributeDefinition).length > 0" @show="setTab">
+    v-if="attributeDefinition && attributeDefinition !== null && Object.keys(attributeDefinition).length > 0" @show="setTab">
     <q-tabs dense align="center" narrow-indicator no-caps active-color="primary" v-model="tab">
       <q-tab :name="key" :label="key" v-for="(value, key) in attributeDefinition" :key="key"/>
     </q-tabs>
@@ -13,17 +13,17 @@
     <q-tab-panels v-model="tab">
       <q-tab-panel :name="key"  v-for="(value, key) in attributeDefinition" :key="key" >
         <div class="q-gutter-md q-my-md">
-          <q-btn color="primary" size="12px" flat dense round icon="cloud_upload" v-if="value.get" @click="$emit('get', key)">
+          <q-btn color="primary" size="12px" flat dense icon="cloud_upload" v-if="value.get" @click="$emit('get', key)">
             读取
           </q-btn>
-          <q-btn color="primary" size="12px" flat dense round icon="cloud_download" v-if="value.set" @click="$emit('set', key)">
+          <q-btn color="primary" size="12px" flat dense icon="cloud_download" v-if="value.set" @click="$emit('set', key)">
             设置
           </q-btn>
-          <q-btn color="primary" size="12px" flat dense round icon="arrow_upward" v-if="value.report" @click="report(key)">
+          <q-btn color="primary" size="12px" flat dense icon="arrow_upward" v-if="value.report" @click="report(key)">
             上报
           </q-btn>
         </div>
-        <q-field dense  >
+        <q-field stack-label  label="数据类型">
           <template v-slot:prepend>
             <q-icon name="event" color="primary"/>
           </template>
@@ -31,7 +31,7 @@
             <div class="self-center full-width no-outline" tabindex="0">{{getDataType(value)}}</div>
           </template>
         </q-field>
-        <q-field dense  >
+        <q-field stack-label label="是否可空" >
           <template v-slot:prepend>
             <q-icon name="event" color="primary"/>
           </template>
@@ -39,7 +39,7 @@
             <div class="self-center full-width no-outline" tabindex="0">{{getNull(value)}}</div>
           </template>
         </q-field>
-        <q-field dense  >
+        <q-field stack-label label="属性描述" >
           <template v-slot:prepend>
             <q-icon name="event" color="primary"/>
           </template>
@@ -50,7 +50,7 @@
         <AttributeDefinition title="类型信息" :attributeDefinition="value.dataType.attTypes" v-if="value.dataType.type === 'Struct' || value.dataType.type === 'Choice' "/>
         <AttributeDefinition title="类型信息(Struct)" :attributeDefinition="value.dataType.dataType.attTypes" v-else-if="value.dataType.type === 'Array'&& (value.dataType.dataType.type === 'Struct')"/>
         <AttributeDefinition title="类型信息(Choice)" :attributeDefinition="value.dataType.dataType.attTypes" v-else-if="value.dataType.type === 'Array'&& (value.dataType.dataType.type === 'Choice')"/>
-        <q-field dense  v-else-if="value.dataType.type === 'Array' || value.dataType.type === 'String' || value.dataType.type === 'DateTime' || value.dataType.type === 'Enum'">
+        <q-field stack-label label="类型信息" v-else-if="value.dataType.type === 'Array' || value.dataType.type === 'String' || value.dataType.type === 'DateTime' || value.dataType.type === 'Enum'">
           <template v-slot:prepend>
             <q-icon name="event" color="primary"/>
           </template>
@@ -76,16 +76,16 @@ export default {
   },
   methods: {
     getDataType (value) {
-      return '数据类型：' + (value.dataType === null ? '' : value.dataType.type)
+      return (value.dataType === null ? '' : value.dataType.type)
     },
     getNull (value) {
-      return '是否可空：' + (value.optional ? '是' : '否')
+      return (value.optional ? '是' : '否')
     },
     getDesc (value) {
-      return '属性描述：' + (value.description === null ? '' : value.description)
+      return (value.description === null ? '' : value.description)
     },
     getType (value) {
-      return '类型信息：' + (getTypeInfo(value.dataType))
+      return (getTypeInfo(value.dataType))
     },
     setTab () {
       this.tab = Object.keys(this.attributeDefinition)[0]

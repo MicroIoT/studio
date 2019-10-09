@@ -13,9 +13,14 @@ const routes = [
         name: 'home',
         component: () => import('pages/Index.vue')
       },
-      { path: 'site/:parentId',
+      { path: 'sites/:parentId',
         name: 'sites',
         component: () => import('pages/site/Sites.vue')
+      },
+      {
+        path: 'sites/:parentId/:id',
+        name: 'site',
+        component: () => import('pages/site/Site.vue')
       },
       { path: 'devicegroups',
         name: 'devicegroups',
@@ -24,7 +29,7 @@ const routes = [
       {
         path: 'devicegroups/devicegroup/:id',
         name: 'devicegroup',
-        component: () => import('pages/configuration/DeviceGroup')
+        component: () => import('pages/configuration/DeviceGroup.vue')
       },
       { path: 'devicetypes',
         name: 'devicetypes',
@@ -33,7 +38,7 @@ const routes = [
       {
         path: 'devicetypes/devicetype/:id',
         name: 'devicetype',
-        component: () => import('pages/configuration/DeviceType')
+        component: () => import('pages/configuration/DeviceType.vue')
       },
       { path: 'sitetypes',
         name: 'sitetypes',
@@ -42,7 +47,7 @@ const routes = [
       {
         path: 'sitetypes/sitetype/:id',
         name: 'sitetype',
-        component: () => import('pages/configuration/SiteType')
+        component: () => import('pages/configuration/SiteType.vue')
       },
       { path: 'users',
         name: 'users',

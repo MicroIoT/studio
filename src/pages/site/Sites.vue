@@ -11,9 +11,10 @@
         <q-card class="q-ma-md">
           <q-card-section>
             <q-breadcrumbs separator="|" class="q-ma-md">
-              <q-breadcrumbs-el :label="this.$store.getters.getDomain.name" icon="home" @click="goto('root')">
+              <q-breadcrumbs-el :label="this.$store.getters.getDomain.name" icon="home" @click="goto('root')" class="cursor-pointer">
               </q-breadcrumbs-el>
               <q-breadcrumbs-el
+                class="cursor-pointer"
                 v-for="(parent, index) in parents"
                 :key="index"
                 :label="parent.name + parent.siteType.name"
@@ -143,9 +144,9 @@ export default {
       this.getParents()
       this.refreshList()
       if (pId === '') {
-        this.$router.replace('/home/site/root')
+        this.$router.replace('/home/sites/root')
       } else {
-        this.$router.replace('/home/site/' + this.parentId)
+        this.$router.replace('/home/sites/' + this.parentId)
       }
     },
     refresh (done) {

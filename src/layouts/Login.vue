@@ -79,14 +79,7 @@ export default {
         protocol: 'iotp://'
       },
       selectOptions: [
-        {
-          label: 'iotp://',
-          value: 'iotp://'
-        },
-        {
-          label: 'iotps://',
-          value: 'iotps://'
-        }
+        'iotp://', 'iotps://'
       ]
     }
   },
@@ -106,7 +99,7 @@ export default {
       }
       let server = {
         host: this.form.server,
-        protocol: this.form.protocol.value
+        protocol: this.form.protocol
       }
       this.$store.commit('server', server)
 

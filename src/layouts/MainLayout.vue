@@ -135,11 +135,10 @@ export default {
   },
   computed: {
     getTo () {
-      console.log('get to: ' + this.parentId)
       if (this.parentId !== '') {
-        return '/home/site/' + this.parentId
+        return '/home/sites/' + this.parentId
       } else {
-        return '/home/site/root'
+        return '/home/sites/root'
       }
     }
   },
