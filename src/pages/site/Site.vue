@@ -11,7 +11,7 @@
             <q-menu>
               <q-list >
                 <Favorite :name="site.string" type="Site" :id="siteId"></Favorite>
-                <Subscribe :name="site.string" type="Site" :id="siteId"></Subscribe>
+                <Subscribe :name="site.string" type="Site" :id="siteId" v-if="mysite"></Subscribe>
               </q-list>
             </q-menu>
           </q-btn>
@@ -99,6 +99,7 @@ export default {
     refresh (done) {
       done()
       this.getSite()
+      this.isMySite()
     },
     getSite () {
       let url = '/sites/' + this.siteId

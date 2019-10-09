@@ -27,6 +27,16 @@ const routes = [
         name: 'device',
         component: () => import('pages/site/Device.vue')
       },
+      {
+        path: 'sites/:parentId/get/:id/:attribute',
+        name: 'get',
+        component: () => import('pages/site/Get.vue')
+      },
+      {
+        path: 'sites/:parentId/events/:id/:attribute',
+        name: 'events',
+        component: () => import('pages/site/Events.vue')
+      },
       { path: 'devicegroups',
         name: 'devicegroups',
         component: () => import('pages/configuration/DeviceGroups.vue')

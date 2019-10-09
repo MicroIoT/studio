@@ -27,7 +27,6 @@
                 </q-item>
               </q-list>
             </q-infinite-scroll>
-            <q-separator />
           </q-card-section>
         </q-card>
       </div>

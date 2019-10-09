@@ -12,7 +12,7 @@
               <q-menu>
                 <q-list >
                   <Favorite :name="device.string" type="Device" :id="deviceId"></Favorite>
-                  <Subscribe :name="device.string" type="Device" :id="deviceId"></Subscribe>
+                  <Subscribe :name="device.string" type="Device" :id="deviceId" v-if="myDevice"></Subscribe>
                 </q-list>
               </q-menu>
             </q-btn>
@@ -78,7 +78,7 @@
                       <q-item-label color="black">{{key}}</q-item-label>
                       <q-item-label caption>{{value.description}}</q-item-label>
                     </q-item-section>
-                    <q-item-section side v-if="subscribed || !$store.getters.getCurrentUser.isArea" >
+                    <q-item-section side v-if="myDevice" >
                       <q-btn color="primary" @click="gotoAction(key)">执行</q-btn>
                     </q-item-section>
                   </q-item>
@@ -107,6 +107,7 @@ export default {
   name: 'device',
   data () {
     return {
+      myDevice: false,
       selectedParam: '',
       deviceId: '',
       device: {
@@ -127,9 +128,19 @@ export default {
   created: function () {
     this.deviceId = this.$route.params.id
     this.getDevice()
-    this.isSubscribed()
+    this.isMyDevice()
   },
   methods: {
+    isMyDevice () {
+      if (this.$store.getters.getCurrentUser.isArea) {
+        let deviceUrl = '/devices/area/' + this.deviceId
+        http('get', deviceUrl, '', (response) => {
+          this.myDevice = response.data
+        })
+      } else {
+        this.myDevice = true
+      }
+    },
     gotoEvents (attribute) {
       var page = {
         name: 'events',
@@ -172,11 +183,6 @@ export default {
       }
       this.$router.push(page)
     },
-    goDevice (id) {
-      this.deviceId = id
-      this.getDevice()
-      this.isSubscribed()
-    },
     getDevice () {
       let deviceUrl = '/devices/' + this.deviceId
       http('get', deviceUrl, '', (response) => {
@@ -186,7 +192,7 @@ export default {
     refresh (done) {
       done()
       this.getDevice()
-      this.isSubscribed()
+      this.isMyDevice()
     }
   }
 }
