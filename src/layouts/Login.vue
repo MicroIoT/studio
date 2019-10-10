@@ -66,6 +66,7 @@
 import { required } from 'vuelidate/lib/validators'
 import { http } from '../components/http'
 import { stomp } from '../components/stomp'
+
 export default {
   name: 'login',
   data () {

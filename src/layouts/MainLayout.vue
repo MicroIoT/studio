@@ -124,6 +124,8 @@
 </template>
 
 <script>
+import { stomp } from '../components/stomp'
+
 export default {
   name: 'main-layout',
 
@@ -132,6 +134,11 @@ export default {
       leftDrawerOpen: false,
       parentId: ''
     }
+  },
+  beforeCreate () {
+    window.addEventListener('load', (event) => {
+      stomp.connect()
+    })
   },
   computed: {
     getTo () {
