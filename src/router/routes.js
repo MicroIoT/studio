@@ -33,6 +33,11 @@ const routes = [
         component: () => import('pages/site/Get.vue')
       },
       {
+        path: 'sites/:parentId/set/:id/:attribute',
+        name: 'set',
+        component: () => import('pages/site/Set.vue')
+      },
+      {
         path: 'sites/:parentId/events/:id/:attribute',
         name: 'events',
         component: () => import('pages/site/Events.vue')

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './user'
+import arrays from './arrays'
 import * as keys from './keys'
 import { Notify } from 'quasar'
 
@@ -29,9 +30,7 @@ const localStoragePlugin = store => {
       }
     } catch (e) {
       Notify.create({
-        message: '请检查存储空间。',
-        color: 'red',
-        timeout: 10000
+        message: '请检查存储空间。'
       })
     }
   })
@@ -39,7 +38,8 @@ const localStoragePlugin = store => {
 
 const store = new Vuex.Store({
   modules: {
-    user
+    user,
+    arrays
   },
   plugins: [localStoragePlugin]
 })
