@@ -6,8 +6,8 @@
     header-class="text-primary"
     :icon="icon"
     :label="title"
-    :sublabel="subTitle"
-    @open="$emit('read')"
+    :caption="subTitle"
+    @before-show="$emit('read')"
     v-if="attributeValue !== null" @show="setTab">
     <q-tabs dense align="center" narrow-indicator no-caps active-color="primary" v-model="tab" v-if="attributeValue && Object.keys(attributeValue).length > 0" >
       <q-tab :name="getName(key)" :label="getName(key)"  v-for="(value, key) in attributeValue" :key="key"/>

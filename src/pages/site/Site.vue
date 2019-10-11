@@ -21,7 +21,7 @@
             <q-list>
               <q-item >
                 <q-item-section avatar>
-                  <q-icon color="primary" name="location_city" />
+                  <q-icon :color="alarmAmount(siteId) > 0  && mysite?'red':'primary'" name="location_city" />
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{site.string}}</q-item-label>
@@ -55,6 +55,7 @@ import { http } from '../../components/http'
 import AttributeValue from '../../components/AttributeValue'
 import Favorite from '../../components/Favorite'
 import Subscribe from '../../components/Subscribe'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -71,6 +72,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      alarmAmount: 'getNotifyObjectAlarmTotal'
+    })
   },
   created: function () {
     this.siteId = this.$route.params.id

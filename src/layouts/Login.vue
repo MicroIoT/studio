@@ -65,7 +65,7 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import { http } from '../components/http'
-import { stomp } from '../components/stomp'
+import { initSystem } from '../components/util'
 
 export default {
   name: 'login',
@@ -116,7 +116,7 @@ export default {
           this.$store.commit('domain', response.data)
           http('get', '/users/me', '', (response) => {
             this.$store.commit('login', response.data)
-            stomp.connect()
+            initSystem()
             this.$router.push({ path: '/home' })
           })
         })

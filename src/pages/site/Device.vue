@@ -22,7 +22,7 @@
             <q-list>
               <q-item >
                 <q-item-section avatar>
-                  <q-icon color="primary"  :name="device.connected?'devices':'phonelink_off'" />
+                  <q-icon :color="alarmAmount(device.id) > 0 && myDevice?'red':'primary'"  :name="device.connected?'devices':'phonelink_off'" />
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{device.string}}</q-item-label>

@@ -27,7 +27,7 @@
               <q-list highlight separator>
                 <q-item v-for="site in sites" :key="site.id">
                   <q-item-section avatar v-if="$q.screen.gt.xs">
-                    <q-icon color="primary" name="location_city" />
+                    <q-icon :color="alarmAmount(site.id) > 0?'red':'primary'" name="location_city" />
                   </q-item-section>
                   <q-item-section @click="goto(site.id)" class="cursor-pointer">
                     <q-item-label >{{site.name}}</q-item-label>
@@ -41,7 +41,7 @@
                 </q-item>
                 <q-item v-for="device in devices" :key="device.id">
                   <q-item-section avatar v-if="$q.screen.gt.xs">
-                    <q-icon color="primary" :name="device.connected?'devices':'phonelink_off'" />
+                    <q-icon :color="alarmAmount(device.id) > 0?'red':'primary'" :name="device.connected?'devices':'phonelink_off'" />
                   </q-item-section>
                   <q-item-section @click="gotoDevice(device.id)" class="cursor-pointer">
                     <q-item-label>{{device.name}}</q-item-label>
@@ -64,6 +64,7 @@
 
 <script>
 import { http } from '../../components/http'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'sites',
@@ -78,6 +79,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      alarmAmount: 'getNotifyObjectAlarmTotal'
+    })
   },
   created: function () {
     this.parentId = this.$route.params.parentId

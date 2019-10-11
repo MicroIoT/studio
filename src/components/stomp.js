@@ -21,7 +21,7 @@ class StompClient {
       'Authorization': `Bearer ${token}`
     }
     this.client.connect(header, () => {
-      this.subArea()
+      this.manageSubscription()
     }, (error) => {
       console.log('stomp error ')
       console.log(error)
@@ -33,44 +33,38 @@ class StompClient {
           'Authorization': `Bearer ${token}`
         }
         this.client.connect(header, () => {
-          this.subArea()
+          this.manageSubscription()
         })
       }, true)
     })
   }
 
-  subArea () {
-    if (store.getters.getCurrentUser.isArea) {
-      http('get', '/sites/me', '', (response) => {
-        let sites = response.data
-        let site
-        for (var i = 0; i < sites.length; i++) {
-          site = sites[i]
-          stomp.subscribe(site.id)
-        }
-        http('get', '/devices/area', '', (response) => {
-          let devices = response.data
-          let device
-          for (var i = 0; i < devices.length; i++) {
-            device = devices[i]
-            stomp.subscribe(device.id)
-          }
-        })
-      })
+  manageSubscription () {
+    let parameter = {
+      params: {
+        subscribe: true
+      }
     }
+    let url = 'configurations/list'
+    http('get', url, parameter, (response) => {
+      response.data.forEach(configuration => {
+        this.subscribe(configuration.notifyObject.id)
+      })
+    })
   }
 
   disconnect () {
-    if (store.getters.getCurrentUser.isArea) {
-      http('get', '/devices/area', '', (response) => {
-        let devices = response.data
-        let device
-        for (var i = 0; i < devices.length; i++) {
-          device = devices[i]
-          stomp.unsubscribe(device.id)
-        }
-      })
+    let parameter = {
+      params: {
+        subscribe: true
+      }
     }
+    let url = 'configurations/list'
+    http('get', url, parameter, (response) => {
+      response.data.forEach(configuration => {
+        this.unsubscribe(configuration.notifyObject.id)
+      })
+    })
     this.client.disconnect(() => {
       console.log('websocket disconnected')
     })
@@ -83,6 +77,10 @@ class StompClient {
       // msg.ack()
       let alarm = JSON.parse(msg.body)
       store.commit('report', alarm)
+      if (!store.getters.isSilent(alarm.notifyObject.id)) {
+        let alert = new Audio('../statics/alert.wav')
+        alert.play()
+      }
     }, { durable: true, 'auto-delete': false, 'x-queue-name': queueId })
     this.subscriptions.set(subTopic, subscription)
   }

@@ -15,6 +15,7 @@
 
 <script>
 import { http } from './http'
+import { stomp } from './stomp'
 
 export default {
   name: 'Subscribe',
@@ -48,6 +49,7 @@ export default {
             message: '已订阅告警',
             color: 'positive'
           })
+          stomp.subscribe(this.getId)
           this.subscribed = true
         })
       } else {
@@ -61,6 +63,7 @@ export default {
             message: '取消订阅告警',
             color: 'positive'
           })
+          stomp.unsubscribe(this.getId)
           this.subscribed = false
         })
       }

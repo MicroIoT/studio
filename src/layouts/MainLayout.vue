@@ -58,12 +58,18 @@
               <q-item-label>设备</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple >
+          <q-item clickable v-ripple to="/home/alarms">
             <q-item-section avatar>
-              <q-icon name="error" />
+              <q-icon name="error" >
+              </q-icon>
             </q-item-section>
             <q-item-section>
-              <q-item-label>告警</q-item-label>
+              <div>
+                告警
+                <q-badge color="red" align="top" v-if="alarmTotal > 0">
+                  {{alarmTotal}}
+                </q-badge>
+              </div>
             </q-item-section>
           </q-item>
           <q-separator spaced inset/>
@@ -124,7 +130,8 @@
 </template>
 
 <script>
-import { stomp } from '../components/stomp'
+import { initSystem } from '../components/util'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'main-layout',
@@ -137,10 +144,13 @@ export default {
   },
   beforeCreate () {
     window.addEventListener('load', (event) => {
-      stomp.connect()
+      initSystem()
     })
   },
   computed: {
+    ...mapGetters({
+      alarmTotal: 'getAlarmTotal'
+    }),
     getTo () {
       if (this.parentId !== '') {
         return '/home/sites/' + this.parentId

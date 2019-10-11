@@ -42,6 +42,15 @@ const routes = [
         name: 'events',
         component: () => import('pages/site/Events.vue')
       },
+      { path: 'alarms',
+        name: 'alarms',
+        component: () => import('pages/alarm/Alarms.vue')
+      },
+      {
+        path: 'alarms/alarm/:id/:type',
+        name: 'alarm',
+        component: () => import('pages/alarm/Alarm.vue')
+      },
       { path: 'devicegroups',
         name: 'devicegroups',
         component: () => import('pages/configuration/DeviceGroups.vue')

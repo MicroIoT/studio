@@ -1,3 +1,6 @@
+import store from '../store'
+import { stomp } from './stomp'
+
 export function getTypeInfo (dataType) {
   let info = ''
   if (dataType.type === 'Enum') {
@@ -19,4 +22,30 @@ export function getTypeInfo (dataType) {
     info = dataType.dataType.type + '\n' + getTypeInfo(dataType.dataType)
   }
   return info
+}
+export function formatDate (date, simple) {
+  var now = new Date()
+  var day = now.getDate()
+  var month = now.getMonth() + 1
+  var year = now.getFullYear()
+  var alarmMonth = parseInt(date.substr(5, 2))
+  var alarmDay = parseInt(date.substr(8, 2))
+  var alarmYear = parseInt(date.substr(0, 4))
+  var alarmHMS = date.substr(11, 8)
+
+  var alarmTime = alarmYear + '' + alarmMonth + '' + alarmDay
+  var time = year + '' + month + '' + day
+  if (time === alarmTime) {
+    return alarmHMS
+  } else {
+    if (simple) {
+      return alarmMonth + '月' + alarmDay + '日'
+    } else {
+      return alarmMonth + '月' + alarmDay + '日' + ' ' + alarmHMS
+    }
+  }
+}
+export function initSystem () {
+  stomp.connect()
+  store.commit('init')
 }

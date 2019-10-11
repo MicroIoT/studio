@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './user'
 import arrays from './arrays'
+import alarms from './alarms'
 import * as keys from './keys'
 import { Notify } from 'quasar'
 
@@ -39,7 +40,8 @@ const localStoragePlugin = store => {
 const store = new Vuex.Store({
   modules: {
     user,
-    arrays
+    arrays,
+    alarms
   },
   plugins: [localStoragePlugin]
 })
