@@ -13,8 +13,8 @@
 
         <q-btn flat no-caps no-wrap class="q-ml-xs" v-if="$q.screen.gt.xs">
           <img src="statics/icons/favicon-32x32.png" size="28px" />
-          <q-toolbar-title shrink class="text-weight-bold">
-            MicroIoT Client
+          <q-toolbar-title>
+            MicroIoT Studio
           </q-toolbar-title>
         </q-btn>
         <q-space />

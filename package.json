@@ -1,8 +1,8 @@
 {
   "name": "first",
   "version": "0.0.1",
-  "description": "MicroIoT",
-  "productName": "MicroIoT Client",
+  "description": "MicroIoT GUI tool",
+  "productName": "MicroIoT Studio",
   "cordovaId": "org.cordova.quasar.app",
   "author": "caoxinyu <caoxinyu@gmail.com>",
   "private": true,

@@ -8,7 +8,7 @@
             <img alt="Quasar logo" src="statics/icons/favicon-96x96.png" width="72">
           </div>
           <q-card-section class="text-center">
-            <div class="text-h4">MicroIoT Client</div>
+            <div class="text-h4">MicroIoT Studio</div>
             <div class="text-subtitle2">登录开启物联网之旅</div>
           </q-card-section>
           <div class="q-ma-md">

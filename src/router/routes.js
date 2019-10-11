@@ -38,6 +38,11 @@ const routes = [
         component: () => import('pages/site/Set.vue')
       },
       {
+        path: 'sites/:parentId/action/:id/:action',
+        name: 'action',
+        component: () => import('pages/site/Action.vue')
+      },
+      {
         path: 'sites/:parentId/events/:id/:attribute',
         name: 'events',
         component: () => import('pages/site/Events.vue')
