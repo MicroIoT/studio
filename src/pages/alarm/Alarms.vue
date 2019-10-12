@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex justify-center q-ma-md ">
-    <div style="width: 600px">
+    <div style="width: 800px">
       <q-toolbar class="text-primary q-my-lg">
         <q-btn flat round dense icon="error" />
         <q-toolbar-title>
@@ -14,7 +14,7 @@
               <q-item-section avatar >
                 <q-icon :color="getColor(alarm.amount)" name="error" />
               </q-item-section>
-              <q-item-section @click="goto(alarm.notifyObjectId, alarm.notifyObjectType)">
+              <q-item-section @click="goto(alarm.notifyObjectId, alarm.notifyObjectType)"  class="cursor-pointer">
                 <q-item-label>{{alarm.notifyObjectName}}</q-item-label>
                 <q-item-label caption>{{getAmount(alarm.amount)}} {{alarm.alarmType}}</q-item-label>
               </q-item-section>

@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex justify-center q-ma-md">
     <q-pull-to-refresh @refresh="refresh">
-      <div style="width: 600px">
+      <div style="width: 800px">
         <q-toolbar class="text-primary q-my-lg">
           <q-btn flat round dense icon="favorite" />
           <q-toolbar-title>

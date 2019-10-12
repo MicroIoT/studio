@@ -14,7 +14,7 @@
         :name="index"
         :title="getTitle(key, value)"
         :caption="value.error?value.errorMsg:''"
-        :done="step > 1"
+        :done="step > 0"
         v-for="(value, key, index) in getDefinition()"
         :key="key"
         :error="value.error"
@@ -37,22 +37,7 @@
         <q-field v-else-if="value.dataType.type === 'DateTime'"
                  :hint="getHint(value)"
         >
-          <q-input class="self-center full-width no-outline"  filled v-model="value.input" @change="check(key, value)" >
-            <template v-slot:prepend>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-date v-model="value.input" :mask="value.dataType.format" />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-
-            <template v-slot:append>
-              <q-icon name="access_time" class="cursor-pointer">
-                <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-time v-model="value.input" :mask="value.dataType.format" format24h />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
+          <q-input class="self-center full-width no-outline"  v-model="value.input" @change="check(key, value)" autofocus>
           </q-input>
         </q-field>
         <q-field v-else-if="value.dataType.type === 'Bool'"
@@ -72,11 +57,13 @@
           <q-input class="self-center full-width no-outline" prefix="纬度： " v-model="value.lantitude" @change="check(key, value)" />
         </q-field>
         <AttributeInput :attDefinition="getStructInfo(value.dataType.attTypes)" v-else-if="value.dataType.type === 'Struct'" type="Struct" :ref="key" :indexName="getIndexName(key)"/>
-        <AttributeInput :attDefinition="getArrayInfo(value.dataType, value.optional)" v-else  type="Array" :ref="key" :indexName="getIndexName(key)"/>
-        <q-stepper-navigation>
-          <div class="q-gutter-xs">
-            <q-btn color="primary" label="下一步" @click="clickCheck(key, value, true)" v-if="showDownward(index)" ></q-btn>
-            <q-btn color="primary" label="上一步" @click="clickCheck(key, value, false)" v-if="showUpward(index)" ></q-btn>
+        <AttributeInput :attDefinition="getArrayInfo(value.dataType, value.optional)" v-else-if="value.dataType.type === 'Array'"  type="Array" :ref="key" :indexName="getIndexName(key)"/>
+        <AttributeInput :attDefinition="getChoiceInfo(value.dataType.attTypes, choice)" v-else  type="Choice" :ref="key" :indexName="getIndexName(key)"/>
+        <q-stepper-navigation content>
+          <q-select label="选择" v-if="value.dataType.type === 'Choice'" :options="getChoice(value.dataType.attTypes)" @input="($value) => { setChoiceValue($value, value) }" :value="getChoiceValue(choice, value.dataType.attTypes)"></q-select>
+          <div class="q-gutter-xs q-my-xs">
+            <q-btn color="primary" label="继续" @click="clickCheck(key, value, true)" v-if="showDownward(index)" ></q-btn>
+            <q-btn color="primary" label="后退" @click="clickCheck(key, value, false)" v-if="showUpward(index)" ></q-btn>
             <q-btn color="primary" label="添加" @click="addArray(key)" v-if="type === 'Array'" ></q-btn>
             <q-btn color="primary" label="删除" @click="deleteArray(key)" v-if="showDelete(type, key)" ></q-btn>
           </div>
@@ -85,14 +72,14 @@
     </q-stepper>
 </template>
 <script>
-import { date } from 'quasar'
 
 export default {
   name: 'AttributeInput',
   props: ['attDefinition', 'title', 'subTitle', 'type', 'indexName'],
   data () {
     return {
-      step: 0
+      step: 0,
+      choice: ''
     }
   },
   created: function () {
@@ -229,6 +216,8 @@ export default {
           result = this.convertArray(definition.dataType.dataType, value)
         } else if (type === 'Struct') {
           result = this.convertStruct(definition.dataType.attTypes, value)
+        } else if (type === 'Choice') {
+          result = this.convertChoice(definition.dataType.attTypes, value)
         } else {
           result = this.convertStr(definition.dataType, value)
         }
@@ -236,9 +225,15 @@ export default {
       }
       return requestInfo
     },
+    convertChoice (definition, value) {
+      var choiceKey = Object.keys(value)[0]
+      var choiceValue = definition[choiceKey]
+      var choiceDef = {}
+      choiceDef[choiceKey] = choiceValue
+      return this.convertStruct(choiceDef, value)
+    },
     convertStruct (definition, value) {
       var structInfo = {}
-
       for (var key in definition) {
         var v = value[key]
         var d = definition[key].dataType
@@ -249,6 +244,8 @@ export default {
           result = this.convertStruct(d.attTypes, v)
         } else if (type === 'Array') {
           result = this.convertArray(d.dataType, v)
+        } else if (type === 'Choice') {
+          result = this.convertChoice(d.attTypes, v)
         } else {
           result = this.convertStr(d, v)
         }
@@ -270,6 +267,9 @@ export default {
         } else if (arrayDataType === 'Struct') {
           d = definition.attTypes
           result = this.convertStruct(d, v)
+        } else if (arrayDataType === 'Choice') {
+          d = definition.attTypes
+          result = this.convertChoice(d, v)
         } else {
           result = this.convertStr(definition, v)
         }
@@ -278,11 +278,6 @@ export default {
       return { arrayValue: arrayInfo }
     },
     convertStr (definition, value) {
-      if (definition.type === 'DateTime') {
-        value = date.formatDate(value, definition.format)
-      } else if (definition.type === 'Enum') {
-        value = value.value
-      }
       return { value: value }
     },
     isBlank: function (value) {
@@ -290,7 +285,7 @@ export default {
     },
     isValid (key, value) {
       var type = value.dataType.type
-      if (type !== 'Struct' && type !== 'Array') {
+      if (type !== 'Struct' && type !== 'Array' && type !== 'Choice') {
         if ((type !== 'Location' && this.isBlank(value.input)) || (type === 'Location' && (this.isBlank(value.longitude) || this.isBlank(value.lantitude)))) {
           if (value.optional === false) {
             value.error = true
@@ -443,10 +438,27 @@ export default {
       let options = []
       let option
       for (let i = 0; i < enums.length; i++) {
-        option = { label: enums[i], value: enums[i] }
+        option = enums[i]
         options.push(option)
       }
       return options
+    },
+    getChoice (attTypes) {
+      return Object.keys(attTypes)
+    },
+    getChoiceInfo (attTypes, key) {
+      let info = {}
+      info[key] = attTypes[key]
+      return info
+    },
+    getChoiceValue (choice, value) {
+      let c = choice === '' ? Object.keys(value)[0] : choice
+      this.choice = c
+      return c
+    },
+    setChoiceValue (value, v) {
+      v.input = {}
+      this.choice = value
     }
   }
 }
