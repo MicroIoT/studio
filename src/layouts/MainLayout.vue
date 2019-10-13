@@ -19,7 +19,7 @@
         </q-btn>
         <q-space />
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn round flat icon="account_box">
+          <q-btn round flat icon="person">
             <q-menu>
               <q-list separator>
                 <q-item clickable v-close-popup :to="gotoUser">

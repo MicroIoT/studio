@@ -16,7 +16,7 @@
                   <q-item-section avatar v-if="$q.screen.gt.xs">
                     <q-icon color="primary" :name="user.isSystem?'person':'streetview'" />
                   </q-item-section>
-                  <q-item-section @click="goto(user.username)">
+                  <q-item-section @click="goto(user.username)" class="cursor-pointer">
                     <q-item-label >{{user.username}}</q-item-label>
                     <q-item-label caption>{{user.email}}</q-item-label>
                   </q-item-section>
