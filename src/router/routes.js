@@ -87,6 +87,11 @@ const routes = [
         name: 'users',
         component: () => import('pages/user/Users.vue')
       },
+      {
+        path: 'users/user/:username',
+        name: 'user',
+        component: () => import('pages/user/User.vue')
+      },
       { path: 'favorites',
         name: 'favorites',
         component: () => import('pages/favorite/Favorites.vue')

@@ -30,7 +30,7 @@
               </q-expansion-item>
             <q-separator />
               <q-expansion-item
-                default-opened
+                ref="response"
                 class="q-ma-md"
                 switch-toggle-side
                 expand-separator
@@ -99,6 +99,7 @@ export default {
                 label: '确定'
               }
             }).onOk((data) => {
+              this.$refs.response.show()
             })
           }, () => {
             this.value = {}

@@ -12,6 +12,12 @@
               <q-list >
                 <Favorite :name="site.string" type="Site" :id="siteId"></Favorite>
                 <Subscribe :name="site.string" type="Site" :id="siteId" v-if="mysite"></Subscribe>
+                <q-item clickable v-close-popup @click="gotoSite">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="link" />
+                  </q-item-section>
+                  <q-item-section>跳转</q-item-section>
+                </q-item>
               </q-list>
             </q-menu>
           </q-btn>
@@ -83,6 +89,13 @@ export default {
     this.isMySite()
   },
   methods: {
+    gotoSite () {
+      if (this.site.type === 'domain') {
+        this.$router.push({ path: '/home/sites/root' })
+      } else {
+        this.$router.push({ path: '/home/sites/' + this.site.id })
+      }
+    },
     gotoSiteType (sitetypeId) {
       var page = {
         name: 'sitetype',

@@ -54,16 +54,8 @@ class StompClient {
   }
 
   disconnect () {
-    let parameter = {
-      params: {
-        subscribe: true
-      }
-    }
-    let url = 'configurations/list'
-    http('get', url, parameter, (response) => {
-      response.data.forEach(configuration => {
-        this.unsubscribe(configuration.notifyObject.id)
-      })
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe()
     })
     this.client.disconnect(() => {
       console.log('websocket disconnected')

@@ -19,14 +19,23 @@
         </q-btn>
         <q-space />
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn round dense flat icon="notifications">
-            <q-badge color="red" text-color="white" floating>
-              2
-            </q-badge>
-            <q-tooltip>Notifications</q-tooltip>
-          </q-btn>
           <q-btn round flat icon="account_box">
-            <q-tooltip>Account</q-tooltip>
+            <q-menu>
+              <q-list separator>
+                <q-item clickable v-close-popup :to="gotoUser">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="person" />
+                  </q-item-section>
+                  <q-item-section>{{$store.getters.getCurrentUser.username}}</q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup @click="exit">
+                  <q-item-section avatar>
+                    <q-icon color="red" name="exit_to_app" />
+                  </q-item-section>
+                  <q-item-section>退出系统</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </q-btn>
         </div>
       </q-toolbar>
@@ -92,7 +101,7 @@
               <q-item-label>设备类型</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple v-if="$store.getters.getCurrentUser.isSystem" to="/home/devicegroups">
+          <q-item clickable v-ripple to="/home/devicegroups">
             <q-item-section avatar>
               <q-icon name="group_work"/>
             </q-item-section>
@@ -132,6 +141,7 @@
 <script>
 import { initSystem } from '../components/util'
 import { mapGetters } from 'vuex'
+import { stomp } from '../components/stomp'
 
 export default {
   name: 'main-layout',
@@ -157,12 +167,21 @@ export default {
       } else {
         return '/home/sites/root'
       }
+    },
+    gotoUser () {
+      return '/home/users/user/' + this.$store.getters.getCurrentUser.username
     }
   },
   methods: {
     change (val) {
       this.parentId = val
       // this.$refs.sites.select()
+    },
+    exit () {
+      stomp.disconnect()
+      this.$store.commit('logout')
+      this.$store.commit('quit')
+      this.$router.push('/')
     }
   }
 }
