@@ -48,10 +48,8 @@ export function http (type, url, params, callback, refresh) {
           } else {
             errorMsg = error.response.data
           }
-          console.log(error.response)
         } else {
           errorMsg = error.message
-          console.log(error)
         }
         if (error.response && error.response.status === 401 && url !== '/login') {
           http('get', '/token', null, (response) => {

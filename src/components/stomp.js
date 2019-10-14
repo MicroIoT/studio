@@ -23,19 +23,18 @@ class StompClient {
     this.client.connect(header, () => {
       this.manageSubscription()
     }, (error) => {
-      console.log('stomp error ')
-      console.log(error)
-
-      http('get', '/token', null, (response) => {
-        store.commit('token', response.data)
-        let token = store.getters.getToken.token
-        let header = {
-          'Authorization': `Bearer ${token}`
-        }
-        this.client.connect(header, () => {
-          this.manageSubscription()
-        })
-      }, true)
+      if (error) {
+        http('get', '/token', null, (response) => {
+          store.commit('token', response.data)
+          let token = store.getters.getToken.token
+          let header = {
+            'Authorization': `Bearer ${token}`
+          }
+          this.client.connect(header, () => {
+            this.manageSubscription()
+          })
+        }, true)
+      }
     })
   }
 
@@ -58,7 +57,6 @@ class StompClient {
       subscription.unsubscribe()
     })
     this.client.disconnect(() => {
-      console.log('websocket disconnected')
     })
     // this.ws.close()
   }
