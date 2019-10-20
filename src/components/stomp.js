@@ -53,9 +53,11 @@ class StompClient {
   }
 
   disconnect () {
-    this.subscriptions.forEach(subscription => {
-      subscription.unsubscribe()
-    })
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => {
+        subscription.unsubscribe()
+      })
+    }
     this.client.disconnect(() => {
     })
     // this.ws.close()

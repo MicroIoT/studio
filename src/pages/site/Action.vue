@@ -15,7 +15,7 @@
                 <q-item-label caption>操作</q-item-label>
                 <q-item-label>{{action}}</q-item-label>
               </q-item-section>
-              <q-item-section side><q-btn color="primary" @click="submit">操作</q-btn></q-item-section>
+              <q-item-section side><q-btn color="primary" @click="submit">执行</q-btn></q-item-section>
             </q-item>
           </q-list>
           <q-card class="q-my-md">

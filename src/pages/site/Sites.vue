@@ -75,7 +75,8 @@ export default {
       parentId: '',
       parents: [],
       siteFinished: false,
-      sitePageNo: 0
+      sitePageNo: 0,
+      domain: ''
     }
   },
   computed: {
@@ -89,12 +90,14 @@ export default {
       this.parentId = ''
     }
     this.getParents()
+    this.domain = this.$store.getters.getDomain.name
   },
   activated: function () {
     if ((this.parentId !== this.$route.params.parentId && this.parentId !== '' && this.$route.params.parentId !== 'root') ||
       (this.parentId === '' && this.$route.params.parentId !== 'root') ||
       (this.parentId !== '' && this.$route.params.parentId === 'root') ||
-      this.$route.query.fresh) {
+      this.$route.query.fresh ||
+      this.domain !== this.$store.getters.getDomain.name) {
       this.parents = []
       this.parentId = this.$route.params.parentId
       if (this.parentId === 'root') {

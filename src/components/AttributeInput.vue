@@ -63,7 +63,7 @@
           <q-select label="选择" v-if="value.dataType.type === 'Choice'" :options="getChoice(value.dataType.attTypes)" @input="($value) => { setChoiceValue($value, value) }" :value="getChoiceValue(choice, value.dataType.attTypes)"></q-select>
           <div class="q-gutter-xs q-my-xs">
             <q-btn color="primary" label="继续" @click="clickCheck(key, value, true)" v-if="showDownward(index)" ></q-btn>
-            <q-btn color="primary" label="后退" @click="clickCheck(key, value, false)" v-if="showUpward(index)" ></q-btn>
+            <q-btn color="primary" label="回退" @click="clickCheck(key, value, false)" v-if="showUpward(index)" ></q-btn>
             <q-btn color="primary" label="添加" @click="addArray(key)" v-if="type === 'Array'" ></q-btn>
             <q-btn color="primary" label="删除" @click="deleteArray(key)" v-if="showDelete(type, key)" ></q-btn>
           </div>
@@ -418,7 +418,7 @@ export default {
     },
     getTitle (key, value) {
       let description
-      if (!(value.desciption) && value.description !== undefined) {
+      if (value.description !== undefined) {
         description = value.description
       } else {
         description = ''

@@ -18,7 +18,10 @@
           </q-toolbar-title>
         </q-btn>
         <q-space />
-        <div class="q-gutter-sm row items-center no-wrap">
+        <div class="q-pl-sm q-gutter-sm row items-center no-wrap">
+          <div>当前领域：</div>
+          <q-select :options="domains" v-model="domain" dense outlined style="width: 150px;">
+          </q-select>
           <q-btn round flat icon="person">
             <q-menu>
               <q-list separator>
@@ -132,14 +135,15 @@
 
     <q-page-container>
       <keep-alive include="sites">
-        <router-view v-on:change="change"/>
+        <router-view v-on:change="change" ref="refPage"/>
       </keep-alive>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { initSystem } from '../components/util'
+import { http } from '../components/http'
+import { initSystem, refreshSystem } from '../components/util'
 import { mapGetters } from 'vuex'
 import { stomp } from '../components/stomp'
 
@@ -149,7 +153,8 @@ export default {
   data () {
     return {
       leftDrawerOpen: false,
-      parentId: ''
+      parentId: '',
+      domains: {}
     }
   },
   beforeCreate () {
@@ -161,6 +166,14 @@ export default {
     ...mapGetters({
       alarmTotal: 'getAlarmTotal'
     }),
+    domain: {
+      get: function () {
+        return this.$store.getters.getDomain.name
+      },
+      set: function (value) {
+        this.chooseDomain(value)
+      }
+    },
     getTo () {
       if (this.parentId !== '') {
         return '/home/sites/' + this.parentId
@@ -172,7 +185,31 @@ export default {
       return '/home/users/user/' + this.$store.getters.getCurrentUser.username
     }
   },
+  created: function () {
+    this.getDomains()
+  },
   methods: {
+    getDomains () {
+      http('get', '/domains/me', null, (response) => {
+        let domains = []
+        for (var key in response.data) {
+          domains.push(response.data[key].name)
+        }
+        this.domains = domains
+      })
+    },
+    chooseDomain (domain) {
+      http('patch', '/domains/' + domain, null, (response) => {
+        this.$store.commit('token', response.data)
+        http('get', '/domains/name/' + domain, '', (response) => {
+          this.$store.commit('domain', response.data)
+          if (this.$refs.refPage.refreshList instanceof Function) {
+            this.$refs.refPage.refreshList()
+          }
+          refreshSystem()
+        })
+      })
+    },
     change (val) {
       this.parentId = val
       // this.$refs.sites.select()

@@ -15,17 +15,17 @@ const localStoragePlugin = store => {
       if (type === 'server' || type === 'quit') {
         window.localStorage.setItem(keys.SERVER_STATE, JSON.stringify(state.user.server))
       }
-      if (type === 'domain') {
+      if (type === 'domain' || type === 'quit') {
         window.localStorage.setItem(keys.DOMAIN_STATE, JSON.stringify(state.user.domain))
       }
-      if (type === 'token') {
+      if (type === 'token' || type === 'quit') {
         window.localStorage.setItem(keys.TOKEN_STATE, JSON.stringify(state.user.token))
       }
       if (type === 'login' || type === 'logout') {
         window.localStorage.setItem(keys.LOGIN_STATE, JSON.stringify(state.user.logined))
         window.localStorage.setItem(keys.USER_STATE, JSON.stringify(state.user.user))
       }
-      if (type === 'report' || type === 'delete' || type === 'mark' || type === 'clear' || type === 'read' || type === 'unread') {
+      if (type === 'report' || type === 'delete' || type === 'clear' || type === 'read' || type === 'unread') {
         let user = JSON.parse(localStorage.getItem(keys.USER_STATE)).username
         window.localStorage.setItem(user + '.' + keys.ALARM_DETAILS_STATE, JSON.stringify(state.alarms.alarmDetails))
       }

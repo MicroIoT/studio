@@ -71,7 +71,6 @@ export default {
   name: 'login',
   data () {
     return {
-      leftDrawer: true,
       form: {
         username: '',
         password: '',

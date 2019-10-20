@@ -49,3 +49,7 @@ export function initSystem () {
   stomp.connect()
   store.commit('init')
 }
+export function refreshSystem () {
+  stomp.disconnect()
+  initSystem()
+}

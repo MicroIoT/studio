@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
-    "@stomp/stompjs": "^5.4.2",
     "ReconnectingWebSocket": "git://github.com/joewalnes/reconnecting-websocket.git",
     "axios": "^0.18.1",
     "quasar": "^1.0.0",
