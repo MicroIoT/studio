@@ -113,6 +113,14 @@
             </q-item-section>
           </q-item>
           <q-separator spaced inset/>
+          <q-item clickable v-ripple to="/home/domains">
+            <q-item-section avatar>
+              <q-icon name="folder"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>领域</q-item-label>
+            </q-item-section>
+          </q-item>
           <q-item clickable v-ripple v-if="$store.getters.getCurrentUser.isSystem" to="/home/users">
             <q-item-section avatar>
               <q-icon name="people"/>
@@ -135,7 +143,7 @@
 
     <q-page-container>
       <keep-alive include="sites">
-        <router-view v-on:change="change" ref="refPage"/>
+        <router-view v-on:change="change" v-on:update="updateDomain" ref="refPage"/>
       </keep-alive>
     </q-page-container>
   </q-layout>
@@ -209,6 +217,9 @@ export default {
           refreshSystem()
         })
       })
+    },
+    updateDomain (val) {
+      this.getDomains()
     },
     change (val) {
       this.parentId = val

@@ -83,6 +83,10 @@ const routes = [
         name: 'sitetype',
         component: () => import('pages/configuration/SiteType.vue')
       },
+      { path: 'domains',
+        name: 'domains',
+        component: () => import('pages/domain/Domains.vue')
+      },
       { path: 'users',
         name: 'users',
         component: () => import('pages/user/Users.vue')
