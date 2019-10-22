@@ -115,7 +115,7 @@
           <q-separator spaced inset/>
           <q-item clickable v-ripple to="/home/domains">
             <q-item-section avatar>
-              <q-icon name="folder"/>
+              <q-icon name="folder_open"/>
             </q-item-section>
             <q-item-section>
               <q-item-label>领域</q-item-label>
@@ -131,7 +131,7 @@
           </q-item>
           <q-item clickable v-ripple to="/home/favorites" replace>
             <q-item-section avatar>
-              <q-icon name="favorite"/>
+              <q-icon name="star_border"/>
             </q-item-section>
             <q-item-section>
               <q-item-label>收藏</q-item-label>

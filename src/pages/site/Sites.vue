@@ -7,6 +7,24 @@
           <q-toolbar-title>
             设备
           </q-toolbar-title>
+          <q-btn flat round dense icon="more_vert">
+            <q-menu>
+              <q-list >
+                <q-item clickable v-close-popup @click="addSite">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="location_city" />
+                  </q-item-section>
+                  <q-item-section>添加场地</q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup @click="addDevice">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="devices" />
+                  </q-item-section>
+                  <q-item-section>添加设备</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-toolbar>
         <q-card class="q-ma-md">
           <q-card-section>
@@ -33,10 +51,15 @@
                     <q-item-label >{{site.name}}</q-item-label>
                     <q-item-label caption >{{site.siteType.name}}</q-item-label>
                   </q-item-section>
-                  <q-item-section side @click="gotoSite(site.id)">
-                    <q-btn color="secondary" size="12px" flat dense round icon="info" >
-                      <q-tooltip>详情</q-tooltip>
-                    </q-btn>
+                  <q-item-section side >
+                    <div class="text-grey-8 q-gutter-xs">
+                      <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoSite(site.id)">
+                        <q-tooltip>详情</q-tooltip>
+                      </q-btn>
+                      <q-btn size="12px" flat dense round icon="delete" color="red" @click="delSite(site.id)">
+                        <q-tooltip>删除场地</q-tooltip>
+                      </q-btn>
+                    </div>
                   </q-item-section>
                 </q-item>
                 <q-item v-for="device in devices" :key="device.id">
@@ -47,10 +70,15 @@
                     <q-item-label>{{device.name}}</q-item-label>
                     <q-item-label caption>{{device.deviceType.name}}</q-item-label>
                   </q-item-section>
-                  <q-item-section side @click="gotoDevice(device.id)">
-                    <q-btn color="secondary" size="12px" flat dense round icon="info" >
-                      <q-tooltip>详情</q-tooltip>
-                    </q-btn>
+                  <q-item-section side >
+                    <div class="text-grey-8 q-gutter-xs">
+                      <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoDevice(device.id)">
+                        <q-tooltip>详情</q-tooltip>
+                      </q-btn>
+                      <q-btn size="12px" flat dense round icon="delete" color="red" @click="delDevice(device.id)">
+                        <q-tooltip>删除设备</q-tooltip>
+                      </q-btn>
+                    </div>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -99,12 +127,17 @@ export default {
       this.$route.query.fresh ||
       this.domain !== this.$store.getters.getDomain.name) {
       this.parents = []
-      this.parentId = this.$route.params.parentId
+      if (this.domain !== this.$store.getters.getDomain.name) {
+        this.parentId = 'root'
+        this.domain = this.$store.getters.getDomain.name
+      } else {
+        this.parentId = this.$route.params.parentId
+      }
       if (this.parentId === 'root') {
         this.parentId = ''
       }
       this.getParents()
-      this.refreshList()
+      this.refreshPage()
     }
   },
   watch: {
@@ -113,6 +146,64 @@ export default {
     }
   },
   methods: {
+    delSite (id) {
+      this.$q.dialog({
+        title: '删除场地',
+        message: '场地相关所有告警，事件，配置等信息都将被删除，确定删除该场地么？',
+        ok: {
+          label: '删除',
+          color: 'red'
+        },
+        cancel: {
+          label: '取消'
+        },
+        persistent: true
+      }).onOk((data) => {
+        let delUrl = '/sites/' + id
+        http('delete', delUrl, '', (response) => {
+          this.refreshPage()
+        })
+      })
+    },
+    delDevice (id) {
+      this.$q.dialog({
+        title: '删除设备',
+        message: '设备相关所有告警，事件，配置等信息都将被删除，确定删除该设备么？',
+        ok: {
+          label: '删除',
+          color: 'red'
+        },
+        cancel: {
+          label: '取消'
+        },
+        persistent: true
+      }).onOk((data) => {
+        let delUrl = '/devices/' + id
+        http('delete', delUrl, '', (response) => {
+          this.refreshPage()
+        })
+      })
+    },
+    addSite () {
+      let parent
+      if (this.parentId === '') {
+        parent = 'root'
+      } else {
+        parent = this.parentId
+      }
+      let url = '/home/sites/' + parent + '/addsite'
+      this.$router.push({ path: url })
+    },
+    addDevice () {
+      let parent
+      if (this.parentId === '') {
+        parent = 'root'
+      } else {
+        parent = this.parentId
+      }
+      let url = '/home/sites/' + parent + '/adddevice'
+      this.$router.push({ path: url })
+    },
     gotoDevice (id) {
       var page = {
         name: 'device',
@@ -130,7 +221,7 @@ export default {
     getParents () {
       if (this.parentId !== '') {
         let siteUrl = '/sites/' + this.parentId
-        http('get', siteUrl, '', (response) => {
+        http('get', siteUrl, null, (response) => {
           var parent
           var site = response.data
           do {
@@ -148,7 +239,7 @@ export default {
       this.parentId = pId
       this.parents = []
       this.getParents()
-      this.refreshList()
+      this.refreshPage()
       if (pId === '') {
         this.$router.replace('/home/sites/root')
       } else {
@@ -156,10 +247,17 @@ export default {
       }
     },
     refresh (done) {
-      this.refreshList()
+      this.refreshPage()
       done()
     },
     refreshList () {
+      this.parentId = ''
+      this.parents = []
+      this.getParents()
+      this.domain = this.$store.getters.getDomain.name
+      this.refreshPage()
+    },
+    refreshPage () {
       this.siteFinished = false
       this.sitePageNo = 0
       this.sites = []

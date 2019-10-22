@@ -3,7 +3,7 @@
     <q-pull-to-refresh @refresh="refresh">
       <div style="width: 600px">
         <q-toolbar class="text-primary q-my-lg">
-          <q-btn flat round dense icon="folder" />
+          <q-btn flat round dense icon="folder_open" />
           <q-toolbar-title>
             领域
           </q-toolbar-title>
@@ -12,7 +12,7 @@
               <q-list >
                 <q-item clickable v-close-popup @click="add">
                   <q-item-section avatar>
-                    <q-icon color="primary" name="add" />
+                    <q-icon color="primary" name="work" />
                   </q-item-section>
                   <q-item-section>添加</q-item-section>
                 </q-item>
@@ -32,7 +32,7 @@
                     <q-item-label >{{domain.name}}</q-item-label>
                   </q-item-section>
                   <q-item-section side >
-                    <q-btn color="secondary" size="12px" flat dense round icon="delete" @click="del(domain.id)">
+                    <q-btn color="red" size="12px" flat dense round icon="delete" @click="del(domain.id)">
                       <q-tooltip>删除</q-tooltip>
                     </q-btn>
                   </q-item-section>
@@ -88,7 +88,11 @@ export default {
         ok: {
           label: '删除',
           color: 'red'
-        }
+        },
+        cancel: {
+          label: '取消'
+        },
+        persistent: true
       }).onOk((data) => {
         let delUrl = '/domains/' + id
         http('delete', delUrl, '', (response) => {

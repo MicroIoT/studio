@@ -23,6 +23,16 @@ const routes = [
         component: () => import('pages/site/Site.vue')
       },
       {
+        path: 'sites/:parentId/addsite',
+        name: 'addsite',
+        component: () => import('pages/site/AddSite.vue')
+      },
+      {
+        path: 'sites/:parentId/adddevice',
+        name: 'adddevice',
+        component: () => import('pages/site/AddDevice.vue')
+      },
+      {
         path: 'sites/:parentId/device/:id',
         name: 'device',
         component: () => import('pages/site/Device.vue')

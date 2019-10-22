@@ -3,7 +3,7 @@
     <q-pull-to-refresh @refresh="refresh">
       <div style="width: 800px">
         <q-toolbar class="text-primary q-my-lg">
-          <q-btn flat round dense icon="favorite" />
+          <q-btn flat round dense icon="star_border" />
           <q-toolbar-title>
             收藏
           </q-toolbar-title>
