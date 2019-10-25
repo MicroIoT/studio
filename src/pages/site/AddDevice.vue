@@ -1,88 +1,86 @@
 <template>
   <q-page class="flex justify-center q-ma-md">
       <q-dialog v-model="showDialog" persistent>
-        <div style="width: 800px">
-          <q-card>
-            <q-toolbar class="text-primary">
-              <q-toolbar-title>
-                添加设备
-              </q-toolbar-title>
-              <q-space />
-              <q-btn icon="close" flat round dense @click="$router.back()" />
-            </q-toolbar>
-            <q-stepper
-              v-model="step"
-              vertical
-              color="primary"
-              animated
+        <q-card style="width: 1000px; max-width: 80vw;">
+          <q-toolbar class="text-primary">
+            <q-toolbar-title>
+              添加设备
+            </q-toolbar-title>
+            <q-space />
+            <q-btn icon="close" flat round dense @click="$router.back()" />
+          </q-toolbar>
+          <q-stepper
+            v-model="step"
+            vertical
+            color="primary"
+            animated
+          >
+            <q-step
+              :name="1"
+              title="设备基本信息"
+              :done="step > 1"
             >
-              <q-step
-                :name="1"
-                title="设备基本信息"
-                :done="step > 1"
-              >
-                <q-field label="父场地" dense>
-                  <q-input class="self-center full-width no-outline" readonly v-model="parentName"/>
-                </q-field>
-                <q-field label="设备名称" dense
-                         hint=""
-                         :error="$v.device.name.$error"
-                         error-message="设备名称不能为空">
-                  <q-input class="self-center full-width no-outline" v-model="device.name" autofocus/>
-                </q-field>
-                <q-field label="设备类型" dense
-                         hint=""
-                         :error="$v.device.devicetype.$error"
-                         error-message="设备类型不能为空">
-                  <q-select class="self-center full-width no-outline" v-model="device.devicetype" :options="devicetypes" @input="typeChanged()"/>
-                </q-field>
+              <q-field label="父场地" dense>
+                <q-input class="self-center full-width no-outline" readonly v-model="parentName"/>
+              </q-field>
+              <q-field label="设备名称" dense
+                       hint=""
+                       :error="$v.device.name.$error"
+                       error-message="设备名称不能为空">
+                <q-input class="self-center full-width no-outline" v-model="device.name" autofocus/>
+              </q-field>
+              <q-field label="设备类型" dense
+                       hint=""
+                       :error="$v.device.devicetype.$error"
+                       error-message="设备类型不能为空">
+                <q-select class="self-center full-width no-outline" v-model="device.devicetype" :options="devicetypes" @input="typeChanged()"/>
+              </q-field>
 
-                <q-stepper-navigation>
-                  <q-btn @click="initDevice" color="primary" label="继续" />
-                </q-stepper-navigation>
-              </q-step>
+              <q-stepper-navigation>
+                <q-btn @click="initDevice" color="primary" label="继续" />
+              </q-stepper-navigation>
+            </q-step>
 
-              <q-step
-                :name="2"
-                title="设备静态属性值"
-                :done="step > 2"
+            <q-step
+              :name="2"
+              title="设备静态属性值"
+              :done="step > 2"
+            >
+              <q-stepper
+                ref="stepper"
+                v-model="attStep"
+                vertical
+                color="primary"
+                animated
+                v-if="getSelectedDeviceType() !== null"
               >
-                <q-stepper
-                  ref="stepper"
-                  v-model="attStep"
-                  vertical
-                  color="primary"
-                  animated
-                  v-if="getSelectedDeviceType() !== null"
+                <q-step
+                  v-for="(value, key, index) in getSelectedDeviceType()"
+                  :name="index"
+                  :title="key"
+                  :caption="value.description"
+                  icon="edit"
+                  :key="key"
+                  :error="value.error"
                 >
-                  <q-step
-                    v-for="(value, key, index) in getSelectedDeviceType()"
-                    :name="index"
-                    :title="key"
-                    :caption="value.description"
-                    icon="edit"
-                    :key="key"
-                    :error="value.error"
-                  >
-                    <AttributeInput :attDefinition="getDefinition(key, value)" :ref="key"/>
-                    <q-stepper-navigation>
-                      <q-btn color="primary" label="继续"  v-if="showDownward(index)" @click="clickCheck(key, value, index, true)"/>
-                      <q-btn color="primary" label="回退" class="q-ml-sm" v-if="showUpward(index)" @click="clickCheck(key, value, index, false)"/>
-                    </q-stepper-navigation>
-                  </q-step>
-                </q-stepper>
+                  <AttributeInput :attDefinition="getDefinition(key, value)" :ref="key"/>
+                  <q-stepper-navigation>
+                    <q-btn color="primary" label="继续"  v-if="showDownward(index)" @click="clickCheck(key, value, index, true)"/>
+                    <q-btn color="primary" label="回退" class="q-ml-sm" v-if="showUpward(index)" @click="clickCheck(key, value, index, false)"/>
+                  </q-stepper-navigation>
+                </q-step>
+              </q-stepper>
 
-                <q-stepper-navigation>
-                  <div class="row">
-                    <q-btn @click="step = 1" color="primary" label="回退" class="q-ml-sm" />
-                    <q-space />
-                    <q-btn @click="finish" color="primary" label="提交" v-show="showFinish"/>
-                  </div>
-                </q-stepper-navigation>
-              </q-step>
-            </q-stepper>
-          </q-card>
-        </div>
+              <q-stepper-navigation>
+                <div class="row">
+                  <q-btn @click="step = 1" color="primary" label="回退" class="q-ml-sm" />
+                  <q-space />
+                  <q-btn @click="finish" color="primary" label="提交" v-show="showFinish"/>
+                </div>
+              </q-stepper-navigation>
+            </q-step>
+          </q-stepper>
+      </q-card>
       </q-dialog>
   </q-page>
 </template>
@@ -91,7 +89,7 @@
 import { required } from 'vuelidate/lib/validators'
 import { http } from '../../components/http'
 import AttributeInput from '../../components/AttributeInput.vue'
-import { mapGetters } from 'vuex'
+import store from '../../store'
 
 export default {
   components: {
@@ -122,16 +120,15 @@ export default {
       devicetype: { required }
     }
   },
-  computed: {
-    ...mapGetters({
-      alarmAmount: 'getNotifyObjectAlarmTotal'
-    })
-  },
   created: function () {
     this.parentId = this.$route.params.parentId
     this.getParent()
     this.getDevicetypes()
     this.showDialog = true
+  },
+  beforeRouteLeave: (to, from, next) => {
+    store.commit('close')
+    next()
   },
   methods: {
     typeChanged () {

@@ -93,6 +93,11 @@ const routes = [
         name: 'sitetype',
         component: () => import('pages/configuration/SiteType.vue')
       },
+      {
+        path: 'sitetypes/addsitetype',
+        name: 'addsitetype',
+        component: () => import('pages/configuration/AddSiteType.vue')
+      },
       { path: 'domains',
         name: 'domains',
         component: () => import('pages/domain/Domains.vue')

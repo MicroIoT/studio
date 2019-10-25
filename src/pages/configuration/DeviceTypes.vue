@@ -19,10 +19,18 @@
                   <q-item-section @click="goto(deviceType.id)" class="cursor-pointer">
                     <q-item-label >{{deviceType.name}}</q-item-label>
                   </q-item-section>
-                  <q-item-section side @click="goto(deviceType.id)">
-                    <q-btn color="secondary" size="12px" flat dense round icon="info" >
+                  <q-item-section side >
+                    <div class="text-grey-8 q-gutter-xs">
+                    <q-btn color="secondary" size="12px" flat dense round icon="info" @click="goto(deviceType.id)">
                       <q-tooltip>详情</q-tooltip>
                     </q-btn>
+                    <q-btn size="12px" flat dense round icon="edit" color="secondary" @click="rename(deviceType)">
+                      <q-tooltip>重命名</q-tooltip>
+                    </q-btn>
+                    <q-btn size="12px" flat dense round icon="delete" color="red" @click="del(deviceType.id)">
+                      <q-tooltip>删除</q-tooltip>
+                    </q-btn>
+                    </div>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -47,6 +55,47 @@ export default {
   computed: {
   },
   methods: {
+    rename (deviceType) {
+      this.$q.dialog({
+        title: '重命名',
+        message: '请输入设备组名称',
+        prompt: {
+          type: 'text',
+          model: deviceType.name
+        },
+        ok: {
+          label: '确定'
+        }
+      }).onOk((data) => {
+        let editUrl = '/devicetypes/name'
+        let info = {
+          'id': deviceType.id,
+          'name': data
+        }
+        http('patch', editUrl, info, (response) => {
+          this.refreshList()
+        })
+      })
+    },
+    del (id) {
+      this.$q.dialog({
+        title: '删除设备类型',
+        message: '确定删除该设备类型么？',
+        ok: {
+          label: '删除',
+          color: 'red'
+        },
+        cancel: {
+          label: '取消'
+        },
+        persistent: true
+      }).onOk((data) => {
+        let delUrl = '/devicetypes/' + id
+        http('delete', delUrl, '', (response) => {
+          this.refreshList()
+        })
+      })
+    },
     goto (id) {
       var page = {
         name: 'devicetype',

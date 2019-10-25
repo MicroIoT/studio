@@ -4,7 +4,6 @@
       v-model="step"
       vertical
       animated
-      keep-alive
       color="primary"
       done="true"
       v-if="getDefinition() && Object.keys(getDefinition()).length > 0"
@@ -418,7 +417,7 @@ export default {
     },
     getTitle (key, value) {
       let description
-      if (value.description !== undefined) {
+      if (value.description !== undefined && value.description !== null) {
         description = value.description
       } else {
         description = ''

@@ -56,6 +56,9 @@
                       <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoSite(site.id)">
                         <q-tooltip>详情</q-tooltip>
                       </q-btn>
+                      <q-btn size="12px" flat dense round icon="edit" color="secondary" @click="renameSite(site)">
+                        <q-tooltip>重命名</q-tooltip>
+                      </q-btn>
                       <q-btn size="12px" flat dense round icon="delete" color="red" @click="delSite(site.id)">
                         <q-tooltip>删除场地</q-tooltip>
                       </q-btn>
@@ -74,6 +77,9 @@
                     <div class="text-grey-8 q-gutter-xs">
                       <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoDevice(device.id)">
                         <q-tooltip>详情</q-tooltip>
+                      </q-btn>
+                      <q-btn size="12px" flat dense round icon="edit" color="secondary" @click="renameDevice(device)">
+                        <q-tooltip>重命名</q-tooltip>
                       </q-btn>
                       <q-btn size="12px" flat dense round icon="delete" color="red" @click="delDevice(device.id)">
                         <q-tooltip>删除设备</q-tooltip>
@@ -146,6 +152,50 @@ export default {
     }
   },
   methods: {
+    renameDevice (device) {
+      this.$q.dialog({
+        title: '重命名',
+        message: '请输入设备名称',
+        prompt: {
+          type: 'text',
+          model: device.name
+        },
+        ok: {
+          label: '确定'
+        }
+      }).onOk((data) => {
+        let editUrl = '/devices/name'
+        let info = {
+          'id': device.id,
+          'name': data
+        }
+        http('patch', editUrl, info, (response) => {
+          this.refreshPage()
+        })
+      })
+    },
+    renameSite (site) {
+      this.$q.dialog({
+        title: '重命名',
+        message: '请输入场地名称',
+        prompt: {
+          type: 'text',
+          model: site.name
+        },
+        ok: {
+          label: '确定'
+        }
+      }).onOk((data) => {
+        let editUrl = '/sites/name'
+        let info = {
+          'id': site.id,
+          'name': data
+        }
+        http('patch', editUrl, info, (response) => {
+          this.refreshPage()
+        })
+      })
+    },
     delSite (id) {
       this.$q.dialog({
         title: '删除场地',

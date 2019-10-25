@@ -32,9 +32,14 @@
                     <q-item-label >{{domain.name}}</q-item-label>
                   </q-item-section>
                   <q-item-section side >
-                    <q-btn color="red" size="12px" flat dense round icon="delete" @click="del(domain.id)">
-                      <q-tooltip>删除</q-tooltip>
-                    </q-btn>
+                    <div class="text-grey-8 q-gutter-xs">
+                      <q-btn size="12px" flat dense round icon="edit" color="secondary" @click="rename(domain)">
+                        <q-tooltip>重命名</q-tooltip>
+                      </q-btn>
+                      <q-btn color="red" size="12px" flat dense round icon="delete" @click="del(domain.id)">
+                        <q-tooltip>删除</q-tooltip>
+                      </q-btn>
+                    </div>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -48,6 +53,7 @@
 
 <script>
 import { http } from '../../components/http'
+import { stomp } from '../../components/stomp'
 
 export default {
   name: 'domains',
@@ -59,6 +65,43 @@ export default {
   computed: {
   },
   methods: {
+    rename (domain) {
+      let msg
+      if (domain.id === this.$store.getters.getDomain.id) {
+        msg = '请输入领域名称，<span class="text-red">重命名后需要重新登录</span>'
+      } else {
+        msg = '请输入领域名称'
+      }
+      this.$q.dialog({
+        title: '重命名',
+        message: msg,
+        html: true,
+        prompt: {
+          type: 'text',
+          model: domain.name
+        },
+        ok: {
+          label: '确定'
+        }
+      }).onOk((data) => {
+        let editUrl = '/domains'
+        let info = {
+          'id': domain.id,
+          'name': data
+        }
+        http('patch', editUrl, info, (response) => {
+          if (domain.id === this.$store.getters.getDomain.id) {
+            stomp.disconnect()
+            this.$store.commit('logout')
+            this.$store.commit('quit')
+            this.$router.push('/')
+          } else {
+            this.refreshList()
+            this.$emit('update', data)
+          }
+        })
+      })
+    },
     add () {
       this.$q.dialog({
         title: '添加',

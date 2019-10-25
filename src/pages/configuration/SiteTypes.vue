@@ -7,6 +7,18 @@
           <q-toolbar-title>
             场地类型
           </q-toolbar-title>
+          <q-btn flat round dense icon="more_vert">
+            <q-menu>
+              <q-list >
+                <q-item clickable v-close-popup @click="add">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="location_city" />
+                  </q-item-section>
+                  <q-item-section>添加</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-toolbar>
         <q-card class="q-ma-md">
           <q-card-section>
@@ -19,10 +31,18 @@
                   <q-item-section @click="goto(siteType.id)" class="cursor-pointer">
                     <q-item-label >{{siteType.name}}</q-item-label>
                   </q-item-section>
-                  <q-item-section side @click="goto(siteType.id)">
-                    <q-btn color="secondary" size="12px" flat dense round icon="info" >
-                      <q-tooltip>详情</q-tooltip>
-                    </q-btn>
+                  <q-item-section side >
+                    <div class="text-grey-8 q-gutter-xs">
+                      <q-btn color="secondary" size="12px" flat dense round icon="info" @click="goto(siteType.id)">
+                        <q-tooltip>详情</q-tooltip>
+                      </q-btn>
+                      <q-btn size="12px" flat dense round icon="edit" color="secondary" @click="renameSitetype(siteType)">
+                        <q-tooltip>重命名</q-tooltip>
+                      </q-btn>
+                      <q-btn size="12px" flat dense round icon="delete" color="red" @click="del(siteType.id)">
+                        <q-tooltip>删除</q-tooltip>
+                      </q-btn>
+                    </div>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -47,6 +67,51 @@ export default {
   computed: {
   },
   methods: {
+    renameSitetype (siteType) {
+      this.$q.dialog({
+        title: '重命名',
+        message: '请输入场地类型名称',
+        prompt: {
+          type: 'text',
+          model: siteType.name
+        },
+        ok: {
+          label: '确定'
+        }
+      }).onOk((data) => {
+        let editUrl = '/sitetypes/name'
+        let info = {
+          'id': siteType.id,
+          'name': data
+        }
+        http('patch', editUrl, info, (response) => {
+          this.refreshList()
+        })
+      })
+    },
+    del (id) {
+      this.$q.dialog({
+        title: '删除场地类型',
+        message: '确定删除该场地类型么？',
+        ok: {
+          label: '删除',
+          color: 'red'
+        },
+        cancel: {
+          label: '取消'
+        },
+        persistent: true
+      }).onOk((data) => {
+        let delUrl = '/sitetypes/' + id
+        http('delete', delUrl, '', (response) => {
+          this.refreshList()
+        })
+      })
+    },
+    add () {
+      let url = '/home/sitetypes/addsitetype'
+      this.$router.push({ path: url })
+    },
     goto (id) {
       var page = {
         name: 'sitetype',
