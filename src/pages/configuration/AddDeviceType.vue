@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex justify-center q-ma-md">
     <q-dialog v-model="showDialog" persistent>
-        <q-card style="width: 800px; max-width: 80vw;">
+        <q-card style="width: 1000px; max-width: 80vw;">
           <q-toolbar class="text-primary">
             <q-toolbar-title>
               添加设备类型
@@ -98,16 +98,17 @@
                     vertical
                     animated
                     color="primary"
+                    v-if="(typeof actionType.request !== 'undefined' && actionType.request.length > 0) || (typeof actionType.response !== 'undefined' && actionType.response.length > 0)"
                   >
                     <q-step
-                      v-if="actionType.request && actionType.request.length > 0"
+                      v-if="typeof actionType.request !== 'undefined' && actionType.request.length > 0"
                       :name="1"
                       :title="key + '请求信息'"
                       :caption="actionType.request.error?actionType.request.errorMsg:''"
                       :done="actionType.step > 1"
                       :error="actionType.request.error"
                     >
-                      <attribute-definition-input :attributes="actionType.request" :ref="key + 'request'"  name="请求参数" subName="参数"></attribute-definition-input>
+                      <attribute-definition-input :attributes="actionType.request" :ref="key + 'request'"  name="请求参数" subName="参数" @null="actionType.step = 2"></attribute-definition-input>
                       <q-stepper-navigation>
                         <div class="row">
                           <!--<q-btn color="primary" label="添加" class="q-ml-sm" @click="addRequest(actionType.request)"/>-->
@@ -117,13 +118,13 @@
                       </q-stepper-navigation>
                     </q-step>
                     <q-step
-                      v-if="actionType.response && actionType.response.length > 0"
+                      v-if="typeof actionType.response !== 'undefined' && actionType.response.length > 0"
                       :name="2"
                       :title="key + '响应信息'"
                       :caption="actionType.response.error?actionType.response.errorMsg:''"
                       :error="actionType.response.error"
                     >
-                      <attribute-definition-input :attributes="actionType.response" :ref="key + 'response'"  name="响应参数" subName="参数"></attribute-definition-input>
+                      <attribute-definition-input :attributes="actionType.response" :ref="key + 'response'"  name="响应参数" subName="参数" @null="actionType.step = 1"></attribute-definition-input>
                       <q-stepper-navigation>
                         <div class="row">
                           <!--<q-btn color="primary" label="添加" class="q-ml-sm" @click="addResponse(actionType.response)"/>-->
@@ -139,7 +140,7 @@
                       <q-btn @click="addActionResponse(actionType)" color="primary" label="添加响应" class="q-ml-sm" v-if="typeof actionType.response === 'undefined' || actionType.response.length === 0" />
                       <q-btn color="primary" label="继续"  @click="clickCheckActionType(actionType, true)" v-if="showNext(index)" class="q-ml-sm"/>
                       <q-btn color="primary" label="回退" @click="clickCheckActionType(actionType, false)" v-if="showPrevious(index)" class="q-ml-sm"/>
-                      <q-btn @click="delActionType(key)" color="primary" label="删除"  class="q-ml-sm"/>
+                      <q-btn @click="delActionType(key, index)" color="primary" label="删除"  class="q-ml-sm"/>
                     </div>
                   </q-stepper-navigation>
                 </q-step>
@@ -238,6 +239,12 @@ export default {
     this.showDialog = true
   },
   methods: {
+    requestNull (actionType) {
+      actionType.step = 2
+    },
+    responseNull (actionType) {
+      actionType.step = 1
+    },
     checkAttributes (next) {
       if (isValidAttributes(this.devicetype.attributes)) {
         next ? this.step = 3 : this.step = 1
@@ -309,11 +316,11 @@ export default {
       let actions = []
       for (var key in this.devicetype.actionTypes) {
         let request
-        if (typeof this.devicetype.actionTypes[key].request !== 'undefined') {
+        if (typeof this.devicetype.actionTypes[key].request !== 'undefined' && typeof this.devicetype.actionTypes[key].request[0] !== 'undefined') {
           request = getAttribute(this.devicetype.actionTypes[key].request[0], false)
         }
         let response
-        if (typeof this.devicetype.actionTypes[key].response !== 'undefined') {
+        if (typeof this.devicetype.actionTypes[key].response !== 'undefined' && typeof this.devicetype.actionTypes[key].response[0] !== 'undefined') {
           response = getAttribute(this.devicetype.actionTypes[key].response[0], false)
         }
         let action = {
@@ -394,8 +401,13 @@ export default {
       }
       this.actionDialog = false
     },
-    delActionType (key) {
+    delActionType (key, index) {
       this.$delete(this.devicetype.actionTypes, key)
+      if (index === Object.keys(this.devicetype.actionTypes).length) {
+        this.actionsStep = index - 1
+      } else {
+        this.actionsStep = index
+      }
     },
     showNext (index) {
       return index !== (Object.keys(this.devicetype.actionTypes).length - 1)

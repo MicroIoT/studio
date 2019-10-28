@@ -331,6 +331,9 @@ export default {
     delAttribute (key) {
       this.$delete(this.attributes, key)
       this.$refs.stepper.previous()
+      if (this.attributes.length === 0) {
+        this.$emit('null', null)
+      }
     },
     delChoice (choices, key) {
       this.$delete(choices, key)
