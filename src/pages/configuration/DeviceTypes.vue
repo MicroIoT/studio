@@ -7,6 +7,18 @@
           <q-toolbar-title>
             设备类型
           </q-toolbar-title>
+          <q-btn flat round dense icon="more_vert">
+            <q-menu>
+              <q-list >
+                <q-item clickable v-close-popup @click="add">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="devices" />
+                  </q-item-section>
+                  <q-item-section>添加设备类型</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-toolbar>
         <q-card class="q-ma-md">
           <q-card-section>
@@ -55,6 +67,10 @@ export default {
   computed: {
   },
   methods: {
+    add () {
+      let url = '/home/devicetypes/adddevicetype'
+      this.$router.push({ path: url })
+    },
     rename (deviceType) {
       this.$q.dialog({
         title: '重命名',

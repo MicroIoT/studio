@@ -84,6 +84,11 @@ const routes = [
         name: 'devicetype',
         component: () => import('pages/configuration/DeviceType.vue')
       },
+      {
+        path: 'devicetypes/adddevicetype',
+        name: 'adddevicetype',
+        component: () => import('pages/configuration/AddDeviceType.vue')
+      },
       { path: 'sitetypes',
         name: 'sitetypes',
         component: () => import('pages/configuration/SiteTypes.vue')

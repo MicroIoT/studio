@@ -14,7 +14,7 @@
                   <q-item-section avatar>
                     <q-icon color="primary" name="work" />
                   </q-item-section>
-                  <q-item-section>添加</q-item-section>
+                  <q-item-section>添加领域</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>

@@ -23,7 +23,7 @@
               <q-field label="场地类型名称" dense
                        hint=""
                        :error="$v.sitetype.name.$error"
-                       error-message="场地名称不能为空">
+                       error-message="场地类型名称不能为空">
                 <q-input class="self-center full-width no-outline" v-model="sitetype.name" autofocus/>
               </q-field>
               <q-field label="场地类型描述" dense

@@ -26,26 +26,31 @@
       >
         <q-step
           :name="1"
-          title="属性信息"
+          :title="getName() + '信息'"
           :caption="attribute.error?attribute.errorMsg:''"
           :done="attInfoStep > 1"
           :error="attribute.error"
         >
-          <q-field label="属性名称(*)" dense
+          <div v-if="device" class="row">
+            <q-checkbox v-model="attribute.get" color="primary" label="可读取"  @input="(get) => {checkGet(get, attribute)}" />
+            <q-checkbox v-model="attribute.set" color="primary" label="可设置"  @input="(set) => {checkSet(set, attribute)}" class="q-ml-sm"/>
+            <q-checkbox v-model="attribute.report" color="primary" label="可上报"  @input="(report) => {checkReport(report, attribute)}" class="q-ml-sm"/>
+          </div>
+          <q-field :label="getName() + '名称(*)'" dense
                    hint="">
             <q-input class="self-center full-width no-outline" v-model="attribute.name" autofocus/>
           </q-field>
-          <q-field label="属性描述" dense
+          <q-field :label="getName() + '描述'" dense
                    hint="">
             <q-input class="self-center full-width no-outline" v-model="attribute.description"/>
           </q-field>
-          <q-field label="属性是否可空(*)" dense
+          <q-field :label="getName() + '是否可空(*)'" dense
                    hint="">
             <q-checkbox class="self-bottom full-width no-outline" v-model="attribute.optional"/>
           </q-field>
-          <q-field label="属性数据类型(*)" dense
+          <q-field :label="getName() + '数据类型(*)'" dense
                    hint="">
-            <q-select class="self-center full-width no-outline" v-model="attribute.dataType" :options="dataTypes" @input="dataTypeChanged"/>
+            <q-select class="self-center full-width no-outline" v-model="attribute.dataType" :options="dataTypes" />
           </q-field>
           <div v-if="attribute.dataType === 'Array'">
             <q-field label="Array数据类型" dense
@@ -107,12 +112,12 @@
         </q-step>
         <q-step
           :name="2"
-          title="属性附加信息"
+          :title="getName() + '附加信息'"
           :done="attInfoStep > 2"
           v-if="attribute.dataType === 'Struct' || attribute.dataType === 'Choice' || (attribute.dataType === 'Array' && (attribute.arraytype === 'Struct' || attribute.arraytype === 'Choice') )"
         >
           <div v-if="attribute.dataType === 'Struct' || (attribute.dataType === 'Array' && (attribute.arraytype === 'Struct'))">
-            <attribute-definition-input :attributes="getStruct(attribute)" :attributeName="attribute.name"></attribute-definition-input>
+            <attribute-definition-input :attributes="getStruct(attribute)" :attributeName="attribute.name" :name="getSubName()"></attribute-definition-input>
           </div>
           <div v-if="attribute.dataType === 'Choice' || (attribute.dataType === 'Array' && (attribute.arraytype === 'Choice'))">
             <q-stepper
@@ -131,7 +136,7 @@
                 :key="key"
                 :error="attribute.error"
               >
-                <attribute-definition-input :attributes="getStruct(choice)" :attributeName="key" :ref="key"></attribute-definition-input>
+                <attribute-definition-input :attributes="getStruct(choice)" :attributeName="key" :ref="key" :name="getSubName()"></attribute-definition-input>
                 <q-stepper-navigation>
                   <q-btn color="primary" label="继续"  v-if="showDownwardChoice(attribute.choices, index)" @click="clickCheckChoice(choice, true)"/>
                   <q-btn color="primary" label="回退" class="q-ml-sm" v-if="showUpwardChoice(index)" @click="clickCheckChoice(choice, false)"/>
@@ -174,9 +179,11 @@
 </template>
 <script>
 import { required } from 'vuelidate/lib/validators'
+import { isValidAttribute, isValidAttributes, getAttributes } from './attribute'
+
 export default {
   name: 'AttributeDefinitionInput',
-  props: ['attributes', 'attributeName', 'subTitle', 'type', 'indexName'],
+  props: ['attributes', 'attributeName', 'name', 'subName', 'device'],
   data () {
     return {
       attStep: 0,
@@ -184,8 +191,6 @@ export default {
       structInfoStep: 0,
       choiceInfoStep: 0,
       dataTypes: ['Int', 'Decimal', 'String', 'DateTime', 'Bool', 'Enum', 'Location', 'Array', 'Struct', 'Choice'],
-      structs: [],
-      choices: {},
       choiceDialog: false,
       choice: {
         name: '',
@@ -202,22 +207,60 @@ export default {
     }
   },
   methods: {
-    showDelete (key) {
-      if (key !== 0) {
-        return true
-      } else {
-        return false
+    checkGet (get, attribute) {
+      if (!get && !attribute.set && !attribute.report) {
+        this.checkDialog()
+        attribute.get = true
       }
+    },
+    checkSet (set, attribute) {
+      if (!set && !attribute.get && !attribute.report) {
+        this.checkDialog()
+        attribute.set = true
+      }
+    },
+    checkReport (report, attribute) {
+      if (!report && !attribute.set && !attribute.get) {
+        this.checkDialog()
+        attribute.report = true
+      }
+    },
+    checkDialog () {
+      this.$q.dialog({
+        title: '属性设置',
+        message: '属性是否可读取，可设置，可上报不能全部设置为不可以！',
+        ok: {
+          label: '确定'
+        }
+      })
+    },
+    showDelete (key) {
+      return true
     },
     getTitle (attribute, key) {
       let suffix = ':'
       if (attribute.name && attribute.name.length > 0) {
         suffix = ':' + attribute.name
       }
-      if (typeof this.attributeName === 'undefined') {
-        return '属性' + ((key + 1).toString()) + suffix
+      let name = this.getName()
+      let attributeName = ''
+      if (typeof this.attributeName !== 'undefined') {
+        attributeName = this.attributeName
+      }
+      return attributeName + name + ((key + 1).toString()) + suffix
+    },
+    getName () {
+      if (typeof this.name !== 'undefined') {
+        return this.name
       } else {
-        return this.attributeName + '属性' + ((key + 1).toString()) + suffix
+        return '属性'
+      }
+    },
+    getSubName () {
+      if (typeof this.subName !== 'undefined') {
+        return this.subName
+      } else {
+        return '属性'
       }
     },
     cont (attribute) {
@@ -230,157 +273,22 @@ export default {
     isValidContinue (attribute) {
       if (typeof attribute.name === 'undefined' || attribute.name.length === 0) {
         attribute.error = true
-        attribute.errorMsg = '属性名称不可空'
+        attribute.errorMsg = this.getName() + '名称不可空'
       } else if (typeof attribute.optional === 'undefined' || attribute.optional.length === 0) {
         attribute.error = true
-        attribute.errorMsg = '属性是否可空未设置'
+        attribute.errorMsg = this.getName() + '是否可空未设置'
       } else {
         attribute.error = false
       }
     },
     canSubmit () {
-      for (var i = 0; i < this.attributes.length; i++) {
-        this.isValid(this.attributes[i])
-        if (this.attributes[i].error) {
-          return false
-        }
-      }
-      return true
+      return isValidAttributes(this.attributes, this.getName(), this.getSubName())
     },
     getAttributes () {
-      let attributes = []
-      for (var i = 0; i < this.attributes.length; i++) {
-        let attribute = this.getAttTypeInfo(this.attributes[i])
-        attributes.push(attribute)
-      }
-      return attributes
-    },
-    getAttTypeInfo (attribute) {
-      let type = attribute.dataType
-      let info = {
-        name: attribute.name,
-        description: attribute.description,
-        optional: attribute.optional,
-        dataType: type,
-        dataTypeInfos: {},
-        additional: []
-      }
-      if (type === 'Array') {
-        info.dataTypeInfos['array.type'] = attribute.arraytype
-      }
-      if (type === 'Enum' || (type === 'Array' && attribute.arraytype === 'Enum')) {
-        info.dataTypeInfos['enum.value'] = attribute.enum
-      } else if (type === 'String' || (type === 'Array' && attribute.arraytype === 'String')) {
-        if (typeof attribute.stringmin !== 'undefined' && typeof attribute.stringmax !== 'undefined') {
-          info.dataTypeInfos['string.min'] = attribute.stringmin
-          info.dataTypeInfos['string.max'] = attribute.stringmax
-        } else if (typeof attribute.stringmin !== 'undefined' && typeof attribute.stringmax === 'undefined') {
-          info.dataTypeInfos['string.min'] = attribute.stringmin
-        } else if (typeof attribute.stringmin === 'undefined' && typeof attribute.stringmax !== 'undefined') {
-          info.dataTypeInfos['string.max'] = attribute.stringmax
-        }
-      } else if (type === 'DateTime' || (type === 'Array' && attribute.arraytype === 'DateTime')) {
-        info.dataTypeInfos['date.format'] = attribute.datetime
-      } else if (type === 'Struct' || (type === 'Array' && attribute.arraytype === 'Struct')) {
-        for (var i = 0; i < attribute.attributes.length; i++) {
-          let struct = this.getAttTypeInfo(attribute.attributes[i])
-          info.additional.push(struct)
-        }
-      } else if (type === 'Choice' || (type === 'Array' && attribute.arraytype === 'Choice')) {
-        for (var key in attribute.choices) {
-          let choice = {
-            name: attribute.choices[key].name,
-            description: attribute.choices[key].description,
-            optional: false,
-            dataType: 'Struct',
-            additional: []
-          }
-          for (var j = 0; j < attribute.choices[key].attributes.length; j++) {
-            let struct = this.getAttTypeInfo(attribute.choices[key].attributes[j])
-            choice.additional.push(struct)
-          }
-          info.additional.push(choice)
-        }
-      }
-      return info
+      return getAttributes(this.attributes, this.device)
     },
     isValid (attribute) {
-      if (attribute) {
-        if (typeof attribute.name === 'undefined' || attribute.name.length === 0) {
-          attribute.error = true
-          attribute.errorMsg = '属性名称不可空'
-        } else if (typeof attribute.optional === 'undefined' || attribute.optional.length === 0) {
-          attribute.error = true
-          attribute.errorMsg = '属性是否可空未设置'
-        } else if (typeof attribute.dataType === 'undefined' || attribute.dataType.length === 0) {
-          attribute.error = true
-          attribute.errorMsg = '属性数据类型不可空'
-        } else if (attribute.dataType === 'Array' && typeof attribute.arraytype === 'undefined') {
-          attribute.error = true
-          attribute.errorMsg = 'Array数据类型不可空'
-        } else if (attribute.dataType === 'Array' && attribute.arraytype === 'Array') {
-          attribute.error = true
-          attribute.errorMsg = 'Array数据类型不可以是Array'
-        } else if ((attribute.dataType === 'Enum' || (attribute.dataType === 'Array' && attribute.arraytype === 'Enum')) && typeof attribute.enum === 'undefined') {
-          attribute.error = true
-          attribute.errorMsg = 'Enum值未定义'
-        } else if ((attribute.dataType === 'DateTime' || (attribute.dataType === 'Array' && attribute.arraytype === 'DateTime')) && typeof attribute.datetime === 'undefined') {
-          attribute.error = true
-          attribute.errorMsg = 'DateTime格式未定义'
-        } else if (attribute.dataType === 'String' || (attribute.dataType === 'Array' && attribute.arraytype === 'String')) {
-          if (typeof attribute.stringmin !== 'undefined' && !/^\d+$/.test(attribute.stringmin)) {
-            attribute.error = true
-            attribute.errorMsg = 'String最小长度必须是正整数'
-          } else if (typeof attribute.stringmax !== 'undefined' && !/^\d+$/.test(attribute.stringmax)) {
-            attribute.error = true
-            attribute.errorMsg = 'String最大长度必须是正整数'
-          } else if (parseInt(attribute.stringmin) > parseInt(attribute.stringmax)) {
-            attribute.error = true
-            attribute.errorMsg = 'String最小长度不能大于最大长度'
-          } else {
-            attribute.error = false
-          }
-        } else if (attribute.dataType === 'Struct' || (attribute.dataType === 'Array' && attribute.arraytype === 'Struct')) {
-          if (typeof attribute.attributes === 'undefined' || attribute.attributes.length === 0) {
-            attribute.error = true
-            attribute.errorMsg = 'Struct未定义'
-          } else {
-            for (var i = 0; i < attribute.attributes.length; i++) {
-              this.isValid(attribute.attributes[i])
-              if (attribute.attributes[i].error) {
-                attribute.error = true
-                attribute.errorMsg = attribute.name + '属性' + (i + 1).toString() + ':' + attribute.attributes[i].errorMsg
-                this.$forceUpdate()
-                return
-              }
-            }
-            attribute.error = false
-          }
-        } else if (attribute.dataType === 'Choice' || (attribute.dataType === 'Array' && attribute.arraytype === 'Choice')) {
-          if (typeof attribute.choices === 'undefined' || Object.keys(attribute.choices).length === 0) {
-            attribute.error = true
-            attribute.errorMsg = 'Choice未定义'
-          } else {
-            for (var key in attribute.choices) {
-              for (var j = 0; j < attribute.choices[key].attributes.length; j++) {
-                this.isValid(attribute.choices[key].attributes[j])
-                if (attribute.choices[key].attributes[j].error) {
-                  attribute.error = true
-                  attribute.errorMsg = attribute.name + 'Choice: ' + key + '属性' + (j + 1).toString() + ':' + attribute.choices[key].attributes[j].errorMsg
-                  this.$forceUpdate()
-                  return
-                }
-              }
-            }
-            attribute.error = false
-          }
-        } else {
-          attribute.error = false
-        }
-      } else {
-        attribute.error = true
-        attribute.errorMsg = '属性未定义'
-      }
+      isValidAttribute(attribute, this.getName(), this.getSubName())
       this.$forceUpdate()
     },
     clickCheckChoice (choice, next) {
@@ -415,14 +323,10 @@ export default {
       return index !== 0
     },
     showDownward (index) {
-      return index !== (Object.keys(this.attributes).length - 1)
+      return index !== (this.attributes.length - 1)
     },
     showUpward (index) {
       return index !== 0
-    },
-    dataTypeChanged () {
-      this.structs = []
-      this.choices = {}
     },
     delAttribute (key) {
       this.$delete(this.attributes, key)

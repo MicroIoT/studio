@@ -14,7 +14,7 @@
                   <q-item-section avatar>
                     <q-icon color="primary" name="location_city" />
                   </q-item-section>
-                  <q-item-section>添加</q-item-section>
+                  <q-item-section>添加场地类型</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
