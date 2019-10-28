@@ -1,12 +1,14 @@
 <template>
   <q-page class="flex justify-center q-ma-md">
-    <q-pull-to-refresh @refresh="refresh">
-      <div style="width: 800px">
-        <q-toolbar class="text-primary q-my-lg">
-          <q-btn flat round dense icon="arrow_back" @click="$router.back()"/>
+    <q-dialog v-model="showDialog" persistent>
+      <q-card style="width: 800px; max-width: 80vw;">
+        <q-pull-to-refresh @refresh="refresh">
+        <q-toolbar class="text-primary">
           <q-toolbar-title>
             读取设备属性
           </q-toolbar-title>
+          <q-space />
+          <q-btn icon="close" flat round dense @click="$router.back()" />
         </q-toolbar>
         <q-card class="q-ma-md">
           <q-card-section>
@@ -31,8 +33,9 @@
             </q-card>
           </q-card-section>
         </q-card>
-      </div>
     </q-pull-to-refresh>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -47,6 +50,7 @@ export default {
   },
   data () {
     return {
+      showDialog: false,
       value: {},
       deviceId: '',
       attribute: ''
@@ -55,6 +59,7 @@ export default {
   created () {
     this.deviceId = this.$route.params.id
     this.attribute = this.$route.params.attribute
+    this.showDialog = true
     this.refresh()
   },
   methods: {
