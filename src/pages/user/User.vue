@@ -162,8 +162,12 @@ export default {
   },
   methods: {
     goto (type, id) {
-      let url = '/home/sites/root/' + type + '/' + id
-      this.$router.push({ path: url })
+      if (type === 'domain') {
+        this.$router.push({ path: '/home/sites/root' })
+      } else {
+        let url = '/home/sites/root/' + type + '/' + id
+        this.$router.push({ path: url })
+      }
     },
     getRole () {
       if (this.user.isSystem) {
@@ -187,7 +191,7 @@ export default {
       if (type === 'site') {
         return 'location_city'
       } else if (type === 'domain') {
-        return 'domain'
+        return 'folder_open'
       } else {
         return 'devices'
       }
