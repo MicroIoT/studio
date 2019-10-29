@@ -151,7 +151,7 @@
 
 <script>
 import { http } from '../components/http'
-import { initSystem, refreshSystem } from '../components/util'
+import { initSystem } from '../components/util'
 import { mapGetters } from 'vuex'
 import { stomp } from '../components/stomp'
 
@@ -162,7 +162,7 @@ export default {
     return {
       leftDrawerOpen: false,
       parentId: '',
-      domains: {}
+      domains: []
     }
   },
   beforeCreate () {
@@ -198,12 +198,11 @@ export default {
   },
   methods: {
     getDomains () {
+      this.domains = []
       http('get', '/domains/me', null, (response) => {
-        let domains = []
         for (var key in response.data) {
-          domains.push(response.data[key].name)
+          this.domains.push(response.data[key].name)
         }
-        this.domains = domains
       })
     },
     chooseDomain (domain) {
@@ -211,10 +210,7 @@ export default {
         this.$store.commit('token', response.data)
         http('get', '/domains/name/' + domain, '', (response) => {
           this.$store.commit('domain', response.data)
-          if (this.$refs.refPage.refreshList instanceof Function) {
-            this.$refs.refPage.refreshList()
-          }
-          refreshSystem()
+          window.location.reload()
         })
       })
     },

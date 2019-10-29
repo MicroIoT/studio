@@ -3,7 +3,7 @@
 
     <q-page-container>
       <q-page padding class="column justify-center items-center" >
-        <q-card inline style="width: 400px; height: 700px">
+        <q-card inline style="width: 400px;">
           <div class="row justify-center q-mt-md">
             <img alt="Quasar logo" src="statics/icons/favicon-96x96.png" width="72">
           </div>
@@ -28,9 +28,7 @@
                   error-message="服务器地址不能为空"/></div>
             </div>
             <q-input class="self-center full-width no-outline" v-model="form.domain"
-               label="领域"
-               :error="$v.form.domain.$error"
-               error-message="领域名称不能为空"/>
+               label="领域"/>
           </div>
           <q-card-actions  >
             <q-btn color="primary" style="width: 400px; max-width: 90vw" @click="login">登录</q-btn>
@@ -67,8 +65,7 @@ export default {
     form: {
       username: { required },
       password: { required },
-      server: { required },
-      domain: { required }
+      server: { required }
     }
   },
   methods: {
@@ -83,21 +80,33 @@ export default {
       }
       this.$store.commit('server', server)
 
-      let loginInfo = {
-        'username': this.form.username,
-        'password': this.form.password,
-        'domain': this.form.domain
+      let loginInfo
+      if (this.form.domain.length > 0) {
+        loginInfo = {
+          'username': this.form.username,
+          'password': this.form.password,
+          'domain': this.form.domain
+        }
+      } else {
+        loginInfo = {
+          'username': this.form.username,
+          'password': this.form.password
+        }
       }
 
       http('post', '/login', loginInfo, (response) => {
         this.$store.commit('token', response.data)
-        http('get', '/domains/name/' + this.form.domain, '', (response) => {
-          this.$store.commit('domain', response.data)
-          http('get', '/users/me', '', (response) => {
-            this.$store.commit('login', response.data)
+        http('get', '/users/me', '', (response) => {
+          this.$store.commit('login', response.data)
+          if (this.form.domain.length > 0) {
             initSystem()
-            this.$router.push({ path: '/home' })
-          })
+            http('get', '/domains/name/' + this.form.domain, '', (response) => {
+              this.$store.commit('domain', response.data)
+            })
+          } else {
+            this.$store.commit('domain', '')
+          }
+          this.$router.push({ path: '/home' })
         })
       })
     }
