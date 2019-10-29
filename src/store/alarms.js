@@ -1,6 +1,7 @@
 import * as keys from './keys'
 import { http } from '../components/http'
 import { date } from 'quasar'
+import store from './index'
 
 const state = {
   alarmDetails: [],
@@ -12,11 +13,13 @@ const getters = {
   getAlarms: state => {
     let groups = {}
     for (var i = 0; i < state.alarmDetails.length; i++) {
-      let notifyObjectId = state.alarmDetails[i].notifyObject.id
-      if (groups[notifyObjectId] == null) {
-        groups[notifyObjectId] = []
+      if (state.alarmDetails[i].domain.id === store.getters.getDomain.id) {
+        let notifyObjectId = state.alarmDetails[i].notifyObject.id
+        if (groups[notifyObjectId] == null) {
+          groups[notifyObjectId] = []
+        }
+        groups[notifyObjectId].push(state.alarmDetails[i])
       }
-      groups[notifyObjectId].push(state.alarmDetails[i])
     }
     let alarms = []
     for (var notifyObjectId in groups) {
@@ -50,10 +53,14 @@ const getters = {
   getAlarmTotal: state => {
     if (state.alarmDetails && state.alarmDetails.length > 0) {
       return Object.keys(state.alarmDetails).reduce((accumulator, key) => {
-        if (state.alarmDetails[key].read) {
-          return accumulator
+        if (state.alarmDetails[key].domain.id === store.getters.getDomain.id) {
+          if (state.alarmDetails[key].read) {
+            return accumulator
+          } else {
+            return accumulator + 1
+          }
         } else {
-          return accumulator + 1
+          return accumulator
         }
       }, 0)
     } else {
