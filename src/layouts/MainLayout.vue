@@ -20,7 +20,7 @@
         <q-space />
         <div class="q-pl-sm q-gutter-sm row items-center no-wrap">
           <div>当前领域：</div>
-          <q-select :options="domains" v-model="domain" dense outlined style="width: 150px;">
+          <q-select :options="domains" v-model="domain" dense outlined style="width: 250px;">
           </q-select>
           <q-btn round flat icon="person">
             <q-menu>

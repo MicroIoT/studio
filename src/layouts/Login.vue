@@ -1,6 +1,5 @@
 <template>
-  <q-layout > <!-- Be sure to play with the Layout demo on docs -->
-
+  <q-layout >
     <q-page-container>
       <q-page padding class="column justify-center items-center" >
         <q-card inline style="width: 400px;">
@@ -15,7 +14,7 @@
             <q-input class="self-center full-width no-outline" v-model="form.username" autofocus
                label="用户"
                :error="$v.form.username.$error"
-               error-message="用户名称不能为空"/>
+               error-message="用户名不能为空"/>
             <q-input class="self-center full-width no-outline" type="password" v-model="form.password"
                label="密码"
                :error="$v.form.password.$error"
@@ -32,6 +31,9 @@
           </div>
           <q-card-actions  >
             <q-btn color="primary" style="width: 400px; max-width: 90vw" @click="login">登录</q-btn>
+          </q-card-actions>
+          <q-card-actions align="right">
+            <q-btn flat color="primary" @click="register">注册新用户</q-btn>
           </q-card-actions>
         </q-card>
       </q-page>
@@ -69,6 +71,9 @@ export default {
     }
   },
   methods: {
+    register () {
+      this.$router.push({ path: '/register' })
+    },
     login () {
       this.$v.form.$touch()
       if (this.$v.form.$error) {

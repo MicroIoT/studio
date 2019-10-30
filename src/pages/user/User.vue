@@ -57,14 +57,14 @@
                 label="负责区域"
                 v-if="user.isArea">
                 <q-list separator>
-                  <q-item v-for="site in visibleSite" :key="site.id">
+                  <q-item v-for="site in user.area" :key="site.id">
                     <q-item-section avatar >
                       <q-icon :name="getSiteIcon(site.type)" color="primary"></q-icon>
                     </q-item-section>
                     <q-item-section  class="cursor-pointer">
-                      <q-item-label color="primary" @click="goto(site.type, site.id)">{{site.string}}</q-item-label>
+                      <q-item-label color="primary" @click="goto(site, site.type, site.id)">{{site.string}}</q-item-label>
                     </q-item-section>
-                    <q-item-section side @click="goto(site.type, site.id)">
+                    <q-item-section side @click="goto(site.type, site.id)" v-if="ifShow(site)">
                       <q-btn color="secondary" size="12px" flat dense round icon="info" >
                         <q-tooltip>详情</q-tooltip>
                       </q-btn>
@@ -149,9 +149,6 @@ export default {
     }
   },
   computed: {
-    visibleSite () {
-      return this.user.area.filter(site => this.ifShow(site))
-    }
   },
   created: function () {
     this.username = this.$route.params.username
@@ -161,12 +158,14 @@ export default {
     this.getUserInfo()
   },
   methods: {
-    goto (type, id) {
-      if (type === 'domain') {
-        this.$router.push({ path: '/home/sites/root' })
-      } else {
-        let url = '/home/sites/root/' + type + '/' + id
-        this.$router.push({ path: url })
+    goto (site, type, id) {
+      if (this.ifShow(site)) {
+        if (type === 'domain') {
+          this.$router.push({ path: '/home/sites/root' })
+        } else {
+          let url = '/home/sites/root/' + type + '/' + id
+          this.$router.push({ path: url })
+        }
       }
     },
     getRole () {
