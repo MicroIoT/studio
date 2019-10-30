@@ -19,7 +19,7 @@
                label="密码"
                :error="$v.form.password.$error"
                error-message="密码不能为空"/>
-            <div class="row">
+            <div class="row" v-if="false">
               <div class="col-4"><q-select v-model="form.protocol"  :options="selectOptions"/></div>
               <div class="col-8"><q-input class="self-center full-width no-outline" v-model="form.server"
                   label="服务器地址"
@@ -54,7 +54,7 @@ export default {
       form: {
         username: '',
         password: '',
-        server: '',
+        server: '47.94.160.97',
         domain: '',
         protocol: 'iotp://'
       },

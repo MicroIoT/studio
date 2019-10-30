@@ -67,6 +67,12 @@ export default {
         return
       }
 
+      let server = {
+        host: '47.94.160.97',
+        protocol: 'iotp://'
+      }
+      this.$store.commit('server', server)
+
       let registerInfo = {
         'email': this.form.username,
         'password': this.form.password
