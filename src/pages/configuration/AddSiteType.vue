@@ -104,7 +104,8 @@ export default {
             message: '场地类型: ' + this.sitetype.name + ' 添加成功!',
             ok: {
               label: '确定'
-            }
+            },
+            persistent: true
           }).onOk((data) => {
             this.$router.replace({ path: '/home/sitetypes' })
           })

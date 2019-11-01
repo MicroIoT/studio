@@ -160,7 +160,8 @@ export default {
           message: '场地: ' + response.data.string + ' 添加成功!',
           ok: {
             label: '确定'
-          }
+          },
+          persistent: true
         }).onOk((data) => {
           if (this.parentId !== 'root') {
             this.$router.replace({ path: '/home/sites/' + this.parentId, query: { fresh: true } })

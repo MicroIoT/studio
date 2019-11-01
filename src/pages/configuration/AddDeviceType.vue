@@ -338,7 +338,8 @@ export default {
           message: '设备类型: ' + this.devicetype.name + ' 添加成功!',
           ok: {
             label: '确定'
-          }
+          },
+          persistent: true
         }).onOk((data) => {
           this.$router.replace({ path: '/home/devicetypes' })
         })

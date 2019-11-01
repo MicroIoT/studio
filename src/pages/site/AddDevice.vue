@@ -162,7 +162,8 @@ export default {
           ok: {
             label: '确定'
           },
-          html: true
+          html: true,
+          persistent: true
         }).onOk((data) => {
           if (this.parentId !== 'root') {
             this.$router.replace({ path: '/home/sites/' + this.parentId, query: { fresh: true } })

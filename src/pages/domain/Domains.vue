@@ -78,7 +78,7 @@ export default {
         html: true,
         prompt: {
           type: 'text',
-          model: domain.name
+          model: ''
         },
         ok: {
           label: '确定'
