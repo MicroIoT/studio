@@ -4,7 +4,7 @@
       <q-page padding class="column justify-center items-center" >
         <q-card inline style="width: 400px;">
           <div class="row justify-center q-mt-md">
-            <img alt="Quasar logo" src="statics/icons/favicon-96x96.png" width="72">
+            <img alt="Quasar logo" src="statics/icons/favicon-96x96.png" >
           </div>
           <q-card-section class="text-center">
             <div class="text-h4">MicroIoT Studio</div>
