@@ -23,17 +23,17 @@
               <q-field label="父场地" dense>
                 <q-input class="self-center full-width no-outline" readonly v-model="parentName"/>
               </q-field>
-              <q-field label="设备名称" dense
-                       hint=""
-                       :error="$v.device.name.$error"
-                       error-message="设备名称不能为空">
-                <q-input class="self-center full-width no-outline" v-model="device.name" autofocus/>
-              </q-field>
               <q-field label="设备类型" dense
                        hint=""
                        :error="$v.device.devicetype.$error"
                        error-message="设备类型不能为空">
-                <q-select class="self-center full-width no-outline" v-model="device.devicetype" :options="devicetypes" @input="typeChanged()"/>
+                <q-select class="self-center full-width no-outline" v-model="device.devicetype" :options="devicetypes" @input="typeChanged()" autofocus/>
+              </q-field>
+              <q-field label="设备名称" dense
+                       hint=""
+                       :error="$v.device.name.$error"
+                       error-message="设备名称不能为空">
+                <q-input class="self-center full-width no-outline" v-model="device.name"/>
               </q-field>
 
               <q-stepper-navigation>

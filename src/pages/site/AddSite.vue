@@ -23,17 +23,17 @@
               <q-field label="父场地" dense>
                 <q-input class="self-center full-width no-outline" readonly v-model="parentName"/>
               </q-field>
-              <q-field label="场地名称" dense
-                       hint=""
-                       :error="$v.site.name.$error"
-                       error-message="场地名称不能为空">
-                <q-input class="self-center full-width no-outline" v-model="site.name" autofocus/>
-              </q-field>
               <q-field label="场地类型" dense
                        hint=""
                        :error="$v.site.sitetype.$error"
                        error-message="场地类型不能为空">
-                <q-select class="self-center full-width no-outline" v-model="site.sitetype" :options="sitetypes" @input="typeChanged()"/>
+                <q-select class="self-center full-width no-outline" v-model="site.sitetype" :options="sitetypes" @input="typeChanged()" autofocus/>
+              </q-field>
+              <q-field label="场地名称" dense
+                       hint=""
+                       :error="$v.site.name.$error"
+                       error-message="场地名称不能为空">
+                <q-input class="self-center full-width no-outline" v-model="site.name"/>
               </q-field>
 
               <q-stepper-navigation>
