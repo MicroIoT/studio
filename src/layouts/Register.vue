@@ -3,8 +3,8 @@
     <q-page-container>
       <q-page padding class="column justify-center items-center" >
         <q-card inline style="width: 400px;">
-          <div class="row justify-center q-mt-md">
-            <img alt="Quasar logo" src="statics/icons/favicon-96x96.png" >
+          <div class="row justify-center q-mt-md cursor-pointer">
+            <img alt="Quasar logo" src="statics/icons/favicon-96x96.png"  @click="home">
           </div>
           <q-card-section class="text-center">
             <div class="text-h4">MicroIoT Studio</div>
@@ -64,6 +64,9 @@ export default {
     }
   },
   methods: {
+    home () {
+      window.location.href = 'https://www.microiot.top'
+    },
     register () {
       this.$v.form.$touch()
       if (this.$v.form.$error) {
