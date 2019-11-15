@@ -68,8 +68,8 @@ export default {
       }
 
       let server = {
-        host: '47.94.160.97',
-        protocol: 'iotp://'
+        host: 'www.microiot.top/server',
+        protocol: 'iotps://'
       }
       this.$store.commit('server', server)
 

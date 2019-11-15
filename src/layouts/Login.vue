@@ -54,9 +54,9 @@ export default {
       form: {
         username: '',
         password: '',
-        server: '47.94.160.97',
+        server: 'www.microiot.top/server',
         domain: '',
-        protocol: 'iotp://'
+        protocol: 'iotps://'
       },
       selectOptions: [
         'iotp://', 'iotps://'
