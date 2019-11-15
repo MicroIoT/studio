@@ -49,6 +49,9 @@ export default {
       }
     }
   },
+  created: function () {
+    this.form.username = this.$route.params.email
+  },
   validations: {
     form: {
       username: { required, email },

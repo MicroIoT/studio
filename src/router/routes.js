@@ -11,6 +11,11 @@ const routes = [
     component: () => import('layouts/Register.vue')
   },
   {
+    path: '/register/:email',
+    name: 'register',
+    component: () => import('layouts/Register.vue')
+  },
+  {
     path: '/home',
     component: () => import('layouts/MainLayout.vue'),
     children: [
