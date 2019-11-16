@@ -72,7 +72,7 @@ class StompClient {
       let alarm = JSON.parse(msg.body)
       store.commit('report', alarm)
       if (!store.getters.isSilent(alarm.notifyObject.id)) {
-        let alert = new Audio('../statics/alert.wav')
+        let alert = new Audio('/statics/alert.wav')
         alert.play()
       }
     }, { durable: true, 'auto-delete': false, 'x-queue-name': queueId })
