@@ -7,8 +7,9 @@ const routes = [
   },
   {
     path: '/register',
-    name: 'register',
-    component: () => import('layouts/Register.vue')
+    redirect: {
+      name: 'register'
+    }
   },
   {
     path: '/register/:email',
