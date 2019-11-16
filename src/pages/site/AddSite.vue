@@ -145,6 +145,8 @@ export default {
           let k = Object.keys(v)[0]
           let val = v[k]
           this.site.attributes[key] = val
+        } else {
+          return
         }
       }
 
