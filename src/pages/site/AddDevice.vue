@@ -145,6 +145,8 @@ export default {
           let k = Object.keys(v)[0]
           let val = v[k]
           this.device.attributes[key] = val
+        } else {
+          return
         }
       }
 
@@ -216,10 +218,7 @@ export default {
         return
       }
       this.step = 2
-      let definition = this.getSelectedDeviceType()
-      if (definition === null) {
-        this.showFinish = true
-      }
+      this.showFinish = true
     },
     getDevicetypes () {
       http('get', '/devicetypes/list', null, (response) => {
