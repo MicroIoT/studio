@@ -13,20 +13,20 @@ const localStoragePlugin = store => {
     let type = mutation.type
     try {
       if (type === 'server' || type === 'quit') {
-        window.localStorage.setItem(keys.SERVER_STATE, JSON.stringify(state.user.server))
+        window.sessionStorage.setItem(keys.SERVER_STATE, JSON.stringify(state.user.server))
       }
       if (type === 'domain' || type === 'quit') {
-        window.localStorage.setItem(keys.DOMAIN_STATE, JSON.stringify(state.user.domain))
+        window.sessionStorage.setItem(keys.DOMAIN_STATE, JSON.stringify(state.user.domain))
       }
       if (type === 'token' || type === 'quit') {
-        window.localStorage.setItem(keys.TOKEN_STATE, JSON.stringify(state.user.token))
+        window.sessionStorage.setItem(keys.TOKEN_STATE, JSON.stringify(state.user.token))
       }
       if (type === 'login' || type === 'logout') {
-        window.localStorage.setItem(keys.LOGIN_STATE, JSON.stringify(state.user.logined))
-        window.localStorage.setItem(keys.USER_STATE, JSON.stringify(state.user.user))
+        window.sessionStorage.setItem(keys.LOGIN_STATE, JSON.stringify(state.user.logined))
+        window.sessionStorage.setItem(keys.USER_STATE, JSON.stringify(state.user.user))
       }
       if (type === 'report' || type === 'delete' || type === 'clear' || type === 'read' || type === 'unread') {
-        let user = JSON.parse(localStorage.getItem(keys.USER_STATE)).username
+        let user = JSON.parse(sessionStorage.getItem(keys.USER_STATE)).username
         window.localStorage.setItem(user + '.' + keys.ALARM_DETAILS_STATE, JSON.stringify(state.alarms.alarmDetails))
       }
     } catch (e) {

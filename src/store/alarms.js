@@ -116,10 +116,10 @@ const getters = {
 
 const mutations = {
   init (state) {
-    if (window.localStorage.getItem(keys.USER_STATE) === null) {
+    if (window.sessionStorage.getItem(keys.USER_STATE) === null) {
       state.alarmDetails = []
     } else {
-      let user = window.localStorage.getItem(keys.USER_STATE)
+      let user = window.sessionStorage.getItem(keys.USER_STATE)
       let username = JSON.parse(user).username
       let detailKey = username + '.' + keys.ALARM_DETAILS_STATE
       let alarmDetails = window.localStorage.getItem(detailKey)
