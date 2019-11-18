@@ -94,7 +94,7 @@ export default {
           html: true,
           persistent: true
         }).onOk((data) => {
-          this.$router.push({ path: '/' })
+          window.location.href = 'https://www.microiot.top/studio'
         })
       })
     }
