@@ -176,7 +176,11 @@ export default {
     }),
     domain: {
       get: function () {
-        return this.$store.getters.getDomain.name
+        if (this.$store.getters.getDomain !== null) {
+          return this.$store.getters.getDomain.name
+        } else {
+          return ''
+        }
       },
       set: function (value) {
         this.chooseDomain(value)
