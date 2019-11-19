@@ -202,6 +202,18 @@ const mutations = {
     state.alarmDetails[index].read = false
   },
   report (state, alarm) {
+    function appendLeadingZeroes (n) {
+      if (n <= 9) {
+        return '0' + n
+      }
+      return n
+    }
+
+    let current = new Date()
+    let date = current.getFullYear() + '-' +
+      appendLeadingZeroes((current.getMonth() + 1)) + '-' + appendLeadingZeroes(current.getDate()) + ' ' +
+      appendLeadingZeroes(current.getHours()) + ':' + appendLeadingZeroes(current.getMinutes()) + ':' + appendLeadingZeroes(current.getSeconds())
+    alarm.receiveTime = date
     alarm.read = false
     state.alarmDetails.unshift(alarm)
   }
