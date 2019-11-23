@@ -52,7 +52,7 @@
         <q-field v-else-if="value.dataType.type === 'Location' "
                  :hint="getHint(value)"
         >
-          <q-input class="self-center full-width no-outline" prefix="经度： " v-model="value.longitude" @change="check(key, value)" autofocus/>
+          <q-input class="self-center full-width no-outline" prefix="经度： " v-model="value.longitude" autofocus/>
           <q-input class="self-center full-width no-outline" prefix="纬度： " v-model="value.lantitude" @change="check(key, value)" />
         </q-field>
         <AttributeInput :attDefinition="getStructInfo(value.dataType.attTypes)" v-else-if="value.dataType.type === 'Struct'" type="Struct" :ref="key" :indexName="getIndexName(key)"/>
