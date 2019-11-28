@@ -1,5 +1,5 @@
 import Stomp from 'stompjs'
-import ReconnectingWebSocket from 'ReconnectingWebSocket'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 import store from '../store'
 import { http } from './http'
 import { Loading, Notify } from 'quasar'
@@ -14,7 +14,7 @@ class StompClient {
   connect () {
     let wsUrl = store.getters.getWs + store.getters.getServer + '/ws_iot'
 
-    this.ws = new ReconnectingWebSocket(wsUrl, null, { debug: false, maxReconnectAttempts: null, reconnectInterval: 10000 })
+    this.ws = new ReconnectingWebSocket(wsUrl)
     this.client = Stomp.over(this.ws)
     let token = store.getters.getToken.token
     let header = {
