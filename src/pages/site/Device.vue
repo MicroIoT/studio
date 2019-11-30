@@ -56,14 +56,30 @@
             </q-field>
 
               <AttributeValue title="设备静态属性" :attributeValue="device.attributes" v-if="device.attributes && Object.keys(device.attributes).length > 0"/>
-              <AttributeDefinition
-                title="设备动态属性"
-                instance="true"
-                :attributeDefinition="device.deviceType.attDefinition"
-                @report="(key) => {gotoEvents(key)}"
-                @get="(key) => {gotoGet(key)}"
-                @set="(key) => {gotoSet(key)}"
-                v-if="device.deviceType.attDefinition && Object.keys(device.deviceType.attDefinition).length > 0"/>
+
+              <q-expansion-item
+                class="q-ma-md"
+                switch-toggle-side
+                expand-separator
+                header-class="text-primary"
+                label="设备动态属性"
+                v-if="device.deviceType.attDefinition && Object.keys(device.deviceType.attDefinition).length > 0">
+                <q-list separator>
+                  <q-item v-for="(value, key) in device.deviceType.attDefinition" :key="key">
+                    <q-item-section>
+                      <q-item-label color="black">{{key}}</q-item-label>
+                      <q-item-label caption>{{value.description}}</q-item-label>
+                    </q-item-section>
+                    <q-item-section side v-if="myDevice" >
+                      <div class="q-gutter-md q-mb-md">
+                        <q-btn color="primary" v-if="value.get" @click="gotoGet(key)" >读取</q-btn>
+                        <q-btn color="primary" v-if="value.set" @click="gotoSet(key)" >设置</q-btn>
+                        <q-btn color="primary" v-if="value.report" @click="gotoEvents(key)" >查询</q-btn>
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-expansion-item>
 
               <q-expansion-item
                 class="q-ma-md"
@@ -95,14 +111,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import { http } from '../../components/http'
-import AttributeDefinition from '../../components/AttributeDefinition'
 import AttributeValue from '../../components/AttributeValue'
 import Favorite from '../../components/Favorite'
 import Subscribe from '../../components/Subscribe'
 
 export default {
   components: {
-    AttributeDefinition, AttributeValue, Favorite, Subscribe
+    AttributeValue, Favorite, Subscribe
   },
   name: 'device',
   data () {
