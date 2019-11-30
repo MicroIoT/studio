@@ -1,5 +1,4 @@
-import Stomp from 'stompjs'
-import ReconnectingWebSocket from 'reconnecting-websocket'
+import { Stomp } from '@stomp/stompjs'
 import store from '../store'
 import { http } from './http'
 import { Loading, Notify } from 'quasar'
@@ -7,15 +6,14 @@ import { Loading, Notify } from 'quasar'
 const alarmTopic = '/topic/alarm.'
 class StompClient {
   constructor () {
-    this.ws = {}
     this.client = {}
     this.subscriptions = new Map()
   }
   connect () {
     let wsUrl = store.getters.getWs + store.getters.getServer + '/ws_iot'
 
-    this.ws = new ReconnectingWebSocket(wsUrl)
-    this.client = Stomp.over(this.ws)
+    this.client = Stomp.client(wsUrl)
+    this.client.reconnect_delay = 10000
     let token = store.getters.getToken.token
     let header = {
       'Authorization': `Bearer ${token}`
@@ -58,11 +56,8 @@ class StompClient {
         subscription.unsubscribe()
       })
     }
-    if (this.ws.readyState === WebSocket.OPEN) {
-      this.client.disconnect(() => {
-      })
-    }
-    // this.ws.close()
+    this.client.disconnect(() => {
+    })
   }
   subscribe (topic) {
     let subTopic = alarmTopic + topic
