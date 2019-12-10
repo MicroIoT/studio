@@ -47,7 +47,7 @@
         <q-field v-else-if="value.dataType.type === 'Enum'"
                  :hint="getHint(value)"
         >
-          <q-select class="self-center full-width no-outline" v-model="value.input" :options="getOptions(value.dataType.enumType)" @change="check(key, value)" />
+          <q-select class="self-center full-width no-outline" v-model="value.input" :options="getOptions(value.dataType.enumType)" @input="check(key, value)" />
         </q-field>
         <q-field v-else-if="value.dataType.type === 'Location' "
                  :hint="getHint(value)"

@@ -56,8 +56,10 @@ class StompClient {
         subscription.unsubscribe()
       })
     }
-    this.client.disconnect(() => {
-    })
+    if (typeof this.client.disconnect === 'function') {
+      this.client.disconnect(() => {
+      })
+    }
   }
   subscribe (topic) {
     let subTopic = alarmTopic + topic
