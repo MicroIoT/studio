@@ -51,7 +51,7 @@ const getters = {
     return alarms
   },
   getAlarmTotal: state => {
-    if (state.alarmDetails && state.alarmDetails.length > 0) {
+    if (state.alarmDetails && state.alarmDetails.length > 0 && store.getters.getDomain !== null) {
       return Object.keys(state.alarmDetails).reduce((accumulator, key) => {
         if (state.alarmDetails[key].domain.id === store.getters.getDomain.id) {
           if (state.alarmDetails[key].read) {

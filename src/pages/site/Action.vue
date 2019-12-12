@@ -103,7 +103,7 @@ export default {
                 label: '确定'
               }
             }).onOk((data) => {
-              this.$refs.response.show()
+              this.$refs.response.hide()
             })
           }, () => {
             this.value = {}
