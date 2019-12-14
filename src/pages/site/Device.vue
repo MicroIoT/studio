@@ -34,8 +34,8 @@
                 <template v-slot:prepend>
                   <q-icon name="event" color="primary"/>
                 </template>
-                <template v-slot:control  @click="gotoDeviceType(device.deviceType.id)">
-                  <div class="self-center full-width no-outline" tabindex="0">{{device.deviceType.name}}</div>
+                <template v-slot:control >
+                  <div @click="gotoDeviceType(device.deviceType.id)" class="self-center full-width no-outline" tabindex="0">{{device.deviceType.name}}</div>
                 </template>
                 <template v-slot:append>
                   <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoDeviceType(device.deviceType.id)">
