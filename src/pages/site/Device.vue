@@ -47,7 +47,7 @@
                 <q-icon name="event" color="primary"/>
               </template>
               <template v-slot:control  @click="gotoSite(device.location)">
-                <div class="self-center full-width no-outline" tabindex="0">{{device.location && device.location.type === "site"?device.location.string:"/"}}</div>
+                <div @click="gotoSite(device.location)" class="self-center full-width no-outline" tabindex="0">{{device.location && device.location.type === "site"?device.location.string:"/"}}</div>
               </template>
               <template v-slot:append>
                 <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoSite(device.location)">

@@ -40,7 +40,7 @@
                   <q-icon name="event" color="primary"/>
                 </template>
                 <template v-slot:control  @click="gotoSiteType(site.siteType.id)">
-                  <div class="self-center full-width no-outline" tabindex="0">{{site.siteType?site.siteType.name:''}}</div>
+                  <div @click="gotoSiteType(site.siteType.id)" class="self-center full-width no-outline" tabindex="0">{{site.siteType?site.siteType.name:''}}</div>
                 </template>
                 <template v-slot:append>
                   <q-btn color="secondary" size="12px" flat dense round icon="info" @click="gotoSiteType(site.siteType.id)">
