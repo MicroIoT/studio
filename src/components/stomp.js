@@ -107,13 +107,17 @@ class StompClient {
       returned = true
       let result = JSON.parse(msg.body)
       if (result.success) {
-        successCallback(result)
+        if (typeof successCallback === 'function') {
+          successCallback(result)
+        }
       } else {
         var error = result.error
         Notify.create({
           message: error
         })
-        failCallback()
+        if (typeof failCallback === 'function') {
+          failCallback()
+        }
       }
     }, { receipt: receipt })
     this.client.onreceipt = (frame) => {
