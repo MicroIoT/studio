@@ -119,6 +119,9 @@ export default {
     })
   },
   created: function () {
+    if (this.domain !== this.$store.getters.getDomain.name) {
+      this.$router.replace('/home/sites/root')
+    }
     this.parentId = this.$route.params.parentId
     if (this.parentId === 'root') {
       this.parentId = ''
