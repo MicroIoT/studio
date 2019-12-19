@@ -119,7 +119,7 @@ export default {
     })
   },
   created: function () {
-    if (this.domain !== this.$store.getters.getDomain.name) {
+    if (this.domain !== this.$store.getters.getDomain.name && this.$route.params.parentId !== 'root') {
       this.$router.replace('/home/sites/root')
     }
     this.parentId = this.$route.params.parentId
@@ -289,14 +289,16 @@ export default {
       if (pId === 'root') {
         pId = ''
       }
-      this.parentId = pId
-      this.parents = []
-      this.getParents()
-      this.refreshPage()
-      if (pId === '') {
-        this.$router.replace('/home/sites/root')
-      } else {
-        this.$router.replace('/home/sites/' + this.parentId)
+      if (this.parentId !== pId) {
+        this.parentId = pId
+        this.parents = []
+        this.getParents()
+        this.refreshPage()
+        if (pId === '') {
+          this.$router.replace('/home/sites/root')
+        } else {
+          this.$router.replace('/home/sites/' + this.parentId)
+        }
       }
     },
     refresh (done) {
