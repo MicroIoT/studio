@@ -7,6 +7,9 @@
           <q-toolbar-title>
             收藏
           </q-toolbar-title>
+          <q-btn flat round dense icon="refresh" @click="refreshList">
+            <q-tooltip>刷新</q-tooltip>
+          </q-btn>
         </q-toolbar>
         <q-card class="q-ma-md">
           <q-card-section>

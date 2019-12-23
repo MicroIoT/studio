@@ -7,6 +7,9 @@
           <q-toolbar-title>
             领域
           </q-toolbar-title>
+          <q-btn flat round dense icon="refresh" @click="refreshList">
+            <q-tooltip>刷新</q-tooltip>
+          </q-btn>
           <q-btn flat round dense icon="more_vert">
             <q-menu>
               <q-list >
