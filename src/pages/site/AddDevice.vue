@@ -158,9 +158,10 @@ export default {
       }
       http('post', '/devices', data, (response) => {
         let account = '账号：' + response.data.deviceAccount.username + '<br>密码：' + response.data.deviceAccount.password + '</span>'
+        let deviceUrl = 'https://www.microiot.top/device/#/login/' + response.data.deviceAccount.username + '/' + response.data.deviceAccount.password
         this.$q.dialog({
           title: '添加设备',
-          message: '设备: ' + response.data.string + ' 添加成功!<br><br><span class="text-red">请妥善保管设备账号信息<br>' + account,
+          message: '设备: ' + response.data.string + ' 添加成功!<br><br><span class="text-red">请妥善保管设备账号信息<br>' + account + '<br><br>登录设备模拟工具：<a href="' + deviceUrl + '" target="_blank">MicroIoT Device</a>',
           ok: {
             label: '确定'
           },
