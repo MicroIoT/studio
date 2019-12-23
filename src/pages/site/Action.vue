@@ -22,6 +22,7 @@
           </q-list>
           <q-card class="q-my-md">
               <q-expansion-item
+                ref="req"
                 default-opened
                 class="q-ma-md"
                 switch-toggle-side
@@ -103,7 +104,8 @@ export default {
                 label: '确定'
               }
             }).onOk((data) => {
-              this.$refs.response.hide()
+              this.$refs.req.hide()
+              this.$refs.response.show()
             })
           }, () => {
             this.value = {}
