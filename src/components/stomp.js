@@ -31,7 +31,7 @@ class StompClient {
           this.client.connect(header, () => {
             this.manageSubscription()
           })
-        }, true)
+        }, true, false)
       }
     })
   }
@@ -47,7 +47,7 @@ class StompClient {
       response.data.forEach(configuration => {
         this.subscribe(configuration.notifyObject.id)
       })
-    })
+    }, false, false)
   }
 
   disconnect () {

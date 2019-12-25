@@ -2,9 +2,10 @@ import axios from 'axios'
 import store from '../store'
 import { Loading, Notify } from 'quasar'
 
-export function http (type, url, params, callback, refresh) {
+export function http (type, url, params, callback, refresh, showLoading) {
   return new Promise(function (resolve, reject) {
     refresh = typeof refresh !== 'undefined' ? refresh : false
+    showLoading = typeof showLoading !== 'undefined' ? showLoading : true
     let client = axios.create({
       baseURL: store.getters.getHttp + store.getters.getServer,
       withCredentials: true
@@ -22,7 +23,9 @@ export function http (type, url, params, callback, refresh) {
         return config
       }
     )
-    Loading.show()
+    if (showLoading) {
+      Loading.show()
+    }
     let method
     if (type === 'post') {
       method = client.post
@@ -35,12 +38,16 @@ export function http (type, url, params, callback, refresh) {
     }
     method(url, params)
       .then((response) => {
-        Loading.hide()
+        if (showLoading) {
+          Loading.hide()
+        }
         callback(response)
       })
       .catch((error) => {
         let errorMsg
-        Loading.hide()
+        if (showLoading) {
+          Loading.hide()
+        }
 
         if (error.response) {
           if (error.response.data.message) {
