@@ -7,6 +7,9 @@
           <q-toolbar-title>
             设备属性：{{attribute}}
           </q-toolbar-title>
+          <q-btn flat round dense icon="refresh" @click="refreshPage">
+            <q-tooltip>刷新</q-tooltip>
+          </q-btn>
         </q-toolbar>
         <q-card class="q-ma-md">
           <q-card-section>
@@ -54,6 +57,9 @@ export default {
   methods: {
     refresh (done) {
       done()
+      this.refreshPage()
+    },
+    refreshPage () {
       this.items = []
       this.$refs.scroll.reset()
       this.$refs.scroll.resume()
