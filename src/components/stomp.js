@@ -100,7 +100,6 @@ class StompClient {
     Loading.show()
     let resultTopic = '/topic/result.' + operateType + '.' + deviceId + '.' + requestId
     let returned = false
-    let receipt = 'receipt_' + requestId
     let subscription = this.client.subscribe(resultTopic, (msg) => {
       Loading.hide()
       subscription.unsubscribe()
@@ -119,19 +118,17 @@ class StompClient {
           failCallback()
         }
       }
-    }, { receipt: receipt })
-    this.client.onreceipt = (frame) => {
-      this.client.send(topic, {}, JSON.stringify(request))
-      setTimeout(() => {
-        if (!returned) {
-          Loading.hide()
-          subscription.unsubscribe()
-          Notify.create({
-            message: '系统无响应！'
-          })
-        }
-      }, 10000)
-    }
+    })
+    this.client.send(topic, {}, JSON.stringify(request))
+    setTimeout(() => {
+      if (!returned) {
+        Loading.hide()
+        subscription.unsubscribe()
+        Notify.create({
+          message: '系统无响应！'
+        })
+      }
+    }, 10000)
   }
 }
 
