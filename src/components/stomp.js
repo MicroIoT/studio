@@ -23,14 +23,22 @@ class StompClient {
     }, (error) => {
       if (error) {
         http('get', '/token', null, (response) => {
-          store.commit('token', response.data)
-          let token = store.getters.getToken.token
-          let header = {
-            'Authorization': `Bearer ${token}`
+          if (!response) {
+            this.client.disconnect(() => {
+            })
+            Notify.create({
+              message: 'token过期，请重新登录！'
+            })
+          } else {
+            store.commit('token', response.data)
+            let token = store.getters.getToken.token
+            let header = {
+              'Authorization': `Bearer ${token}`
+            }
+            this.client.connect(header, () => {
+              this.manageSubscription()
+            })
           }
-          this.client.connect(header, () => {
-            this.manageSubscription()
-          })
         }, true, false)
       }
     })

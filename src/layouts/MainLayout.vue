@@ -129,6 +129,14 @@
               <q-item-label>用户</q-item-label>
             </q-item-section>
           </q-item>
+          <q-item clickable v-ripple v-if="$store.getters.getCurrentUser.isSystem" to="/home/sessions">
+            <q-item-section avatar>
+              <q-icon name="people_outline"/>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>会话</q-item-label>
+            </q-item-section>
+          </q-item>
           <q-item clickable v-ripple to="/home/favorites" replace>
             <q-item-section avatar>
               <q-icon name="star_border"/>

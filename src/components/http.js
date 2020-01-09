@@ -58,11 +58,26 @@ export function http (type, url, params, callback, refresh, showLoading) {
         } else {
           errorMsg = error.message
         }
-        if (error.response && error.response.status === 401 && url !== '/login') {
-          http('get', '/token', null, (response) => {
-            store.commit('token', response.data)
-            http(type, url, params, callback)
-          }, true)
+        if (error.response && error.response.status === 401 && url !== '/login' && !refresh) {
+          if (error.response.data === 'JWT Token not exist') {
+            Notify.create({
+              message: 'token不存在，请重新登录！'
+            })
+          } else {
+            http('get', '/token', null, (response) => {
+              if (!response) {
+                Notify.create({
+                  message: 'token过期，请重新登录！'
+                })
+              } else {
+                store.commit('token', response.data)
+                http(type, url, params, callback)
+              }
+            }, true)
+          }
+        } else if (refresh) {
+          var response = false
+          callback(response)
         } else {
           Notify.create({
             message: errorMsg
