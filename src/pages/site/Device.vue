@@ -137,7 +137,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      alarmAmount: 'getNotifyObjectAlarmTotal'
+      alarmAmount: 'getNotifyObjectAlarmTotal',
+      domain: 'getDomain'
     })
   },
   created: function () {
@@ -164,25 +165,43 @@ export default {
       this.$router.push(page)
     },
     gotoGet (attribute) {
-      var page = {
-        name: 'get',
-        params: { id: this.deviceId, attribute: attribute }
+      if (this.domain) {
+        var page = {
+          name: 'get',
+          params: { id: this.deviceId, attribute: attribute }
+        }
+        this.$router.push(page)
+      } else {
+        this.$q.notify({
+          message: 'please choose domain first'
+        })
       }
-      this.$router.push(page)
     },
     gotoSet (attribute) {
-      var page = {
-        name: 'set',
-        params: { id: this.deviceId, attribute: attribute }
+      if (this.domain) {
+        var page = {
+          name: 'set',
+          params: { id: this.deviceId, attribute: attribute }
+        }
+        this.$router.push(page)
+      } else {
+        this.$q.notify({
+          message: 'please choose domain first'
+        })
       }
-      this.$router.push(page)
     },
     gotoAction (action) {
-      var page = {
-        name: 'action',
-        params: { id: this.deviceId, action: action }
+      if (this.domain) {
+        var page = {
+          name: 'action',
+          params: { id: this.deviceId, action: action }
+        }
+        this.$router.push(page)
+      } else {
+        this.$q.notify({
+          message: 'please choose domain first'
+        })
       }
-      this.$router.push(page)
     },
     gotoSite (site) {
       if (site.type === 'domain') {
