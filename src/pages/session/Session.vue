@@ -87,11 +87,8 @@ export default {
         let url = '/devices/username/' + this.session.username
         http('get', url, '', (response) => {
           device = response.data
-          page = {
-            name: 'device',
-            params: { id: device.id }
-          }
-          this.$router.push(page)
+          let path = '/home/sites/' + device.location.id + '/device/' + device.id
+          this.$router.push({ path: path })
         })
       } else {
         page = {
