@@ -1,5 +1,5 @@
 <template>
-  <q-item-label v-if="typeof dataValue !== 'undefined' && typeof dataValue.value !== 'object'">
+  <q-item-label v-if="typeof dataValue !== 'undefined' && dataValue !== null && typeof dataValue.value !== 'object'">
       {{dataValue.string}}
   </q-item-label>
   <AttributeValue :attributeValue="getValue(dataValue)" v-else/>
@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     getValue (value) {
-      if (typeof value !== 'undefined') {
+      if (typeof value !== 'undefined' && value !== null) {
         return value.value
       }
     }
