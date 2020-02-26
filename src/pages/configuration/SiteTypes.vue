@@ -19,6 +19,12 @@
                   </q-item-section>
                   <q-item-section>添加场地类型</q-item-section>
                 </q-item>
+                <q-item clickable v-close-popup @click="impDialog">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="cloud_upload" />
+                  </q-item-section>
+                  <q-item-section>导入场地类型</q-item-section>
+                </q-item>
               </q-list>
             </q-menu>
           </q-btn>
@@ -42,6 +48,9 @@
                       <q-btn size="12px" flat dense round icon="edit" color="secondary" @click="renameSitetype(siteType)">
                         <q-tooltip>重命名</q-tooltip>
                       </q-btn>
+                      <q-btn size="12px" flat dense round icon="cloud_download" color="secondary" @click="exp(siteType)">
+                        <q-tooltip>导出</q-tooltip>
+                      </q-btn>
                       <q-btn size="12px" flat dense round icon="delete" color="red" @click="del(siteType.id)">
                         <q-tooltip>删除</q-tooltip>
                       </q-btn>
@@ -54,6 +63,33 @@
         </q-card>
       </div>
     </q-pull-to-refresh>
+    <q-dialog v-model="importDialog">
+      <q-card style="width: 400px; max-width: 80vw;">
+        <q-toolbar class="text-primary">
+          <q-toolbar-title>
+            导入场地类型
+          </q-toolbar-title>
+          <q-space />
+          <q-btn icon="close" flat round dense @click="importDialog = false" />
+        </q-toolbar>
+        <q-card class="q-ma-md">
+          <q-card-section>
+            <q-list>
+              <q-item>
+                <q-file color="primary"  v-model="file" label="场地类型文件" >
+                  <template v-slot:prepend>
+                    <q-icon name="attach_file" />
+                  </template>
+                </q-file>
+              </q-item>
+            </q-list>
+          </q-card-section>
+          <q-card-actions align="right" class="text-primary">
+            <q-btn label="确定" color="primary" @click="imp" />
+          </q-card-actions>
+        </q-card>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -64,7 +100,9 @@ export default {
   name: 'site-types',
   data () {
     return {
-      siteTypes: []
+      siteTypes: [],
+      importDialog: false,
+      file: null
     }
   },
   computed: {
@@ -90,6 +128,39 @@ export default {
         http('patch', editUrl, info, (response) => {
           this.refreshList()
         })
+      })
+    },
+    impDialog () {
+      this.importDialog = true
+    },
+    imp () {
+      if (this.file !== null) {
+        let formData = new FormData()
+        formData.append('file', this.file)
+        http('post', '/sitetypes/import', formData, (response) => {
+          this.refreshList()
+        })
+        this.importDialog = false
+        this.file = null
+      } else {
+        this.$q.dialog({
+          title: '警告',
+          message: '请选择场地类型文件。',
+          ok: {
+            label: '确定'
+          }
+        })
+      }
+    },
+    exp (sitetype) {
+      let param = { responseType: 'blob' }
+      http('get', '/sitetypes/export/' + sitetype.id, param, (response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', sitetype.name + '.json')
+        document.body.appendChild(link)
+        link.click()
       })
     },
     del (id) {

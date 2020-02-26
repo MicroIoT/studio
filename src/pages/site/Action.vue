@@ -57,7 +57,7 @@ import { http } from '../../components/http'
 import store from '../../store'
 
 export default {
-  name: 'set',
+  name: 'action',
   components: {
     AttributeInput, DataValue
   },
