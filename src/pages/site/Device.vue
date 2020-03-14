@@ -54,6 +54,39 @@
                 </q-btn>
               </template>
             </q-field>
+              <q-field stack-label class="q-ma-md" label="网关" v-if="device.gateway !== null">
+                <template v-slot:prepend>
+                  <q-icon name="event" color="primary"/>
+                </template>
+                <template v-slot:control  @click="goDevice(device.gateway.id)">
+                  <div @click="goDevice(device.gateway.id)" class="self-center full-width no-outline" tabindex="0">{{device.gateway.string}}</div>
+                </template>
+                <template v-slot:append>
+                  <q-btn color="secondary" size="12px" flat dense round icon="info" @click="goDevice(device.gateway.id)">
+                  </q-btn>
+                </template>
+              </q-field>
+              <q-expansion-item
+                class="q-ma-md"
+                switch-toggle-side
+                expand-separator
+                header-class="text-primary"
+                label="子设备"
+                v-if="subdevices.length > 0">
+                <q-list separator>
+                  <q-item v-for="(value, key) in subdevices" :key="key">
+                    <q-item-section avatar>
+                      <q-icon color="primary" name="devices" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label @click="goDevice(value.id)" class="cursor-pointer">{{value.string}}</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-icon name="info" color="secondary" @click="goDevice(value.id)" />
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-expansion-item>
 
               <AttributeValue title="设备静态属性" :attributeValue="device.attributes" v-if="device.attributes && Object.keys(device.attributes).length > 0"/>
 
@@ -125,6 +158,7 @@ export default {
       myDevice: false,
       selectedParam: '',
       deviceId: '',
+      subdevices: [],
       device: {
         site: [],
         deviceType: {
@@ -217,10 +251,18 @@ export default {
       }
       this.$router.push(page)
     },
+    goDevice (id) {
+      this.deviceId = id
+      this.getDevice()
+    },
     getDevice () {
       let deviceUrl = '/devices/' + this.deviceId
       http('get', deviceUrl, '', (response) => {
         this.device = response.data
+        let url = '/devices/subdevice/' + this.deviceId
+        http('get', url, '', (response) => {
+          this.subdevices = response.data
+        })
       })
     },
     refresh (done) {
