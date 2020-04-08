@@ -38,7 +38,7 @@ const routes = [
         component: () => import('pages/site/AddSite.vue')
       },
       {
-        path: 'sites/:parentId/adddevice',
+        path: 'sites/:parentId/adddevice/:subdevice',
         name: 'adddevice',
         component: () => import('pages/site/AddDevice.vue')
       },

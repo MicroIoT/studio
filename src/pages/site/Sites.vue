@@ -19,11 +19,17 @@
                   </q-item-section>
                   <q-item-section>添加场地</q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup @click="addDevice">
+                <q-item clickable v-close-popup @click="addDevice(false)">
                   <q-item-section avatar>
                     <q-icon color="primary" name="devices" />
                   </q-item-section>
                   <q-item-section>添加设备</q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup @click="addDevice(true)">
+                  <q-item-section avatar>
+                    <q-icon color="primary" name="devices" />
+                  </q-item-section>
+                  <q-item-section>添加子设备</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -250,14 +256,19 @@ export default {
       let url = '/home/sites/' + parent + '/addsite'
       this.$router.push({ path: url })
     },
-    addDevice () {
+    addDevice (subdevice) {
       let parent
       if (this.parentId === '') {
         parent = 'root'
       } else {
         parent = this.parentId
       }
-      let url = '/home/sites/' + parent + '/adddevice'
+      let url
+      if (!subdevice) {
+        url = '/home/sites/' + parent + '/adddevice/false'
+      } else {
+        url = '/home/sites/' + parent + '/adddevice/true'
+      }
       this.$router.push({ path: url })
     },
     gotoDevice (id) {
