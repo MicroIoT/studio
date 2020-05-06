@@ -33,7 +33,7 @@
             <q-btn color="primary" style="width: 400px; max-width: 90vw" @click="login">登录</q-btn>
           </q-card-actions>
           <q-card-actions align="right">
-            <q-btn flat color="primary" @click="device" no-caps>MicroIoT Device</q-btn>
+            <q-btn flat color="primary" @click="register" no-caps>注册</q-btn>
           </q-card-actions>
         </q-card>
       </q-page>
